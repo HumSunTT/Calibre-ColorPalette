@@ -2,6 +2,10 @@ export default {
   title: 'カラーパレット',
   subtitle: 'プロフェッショナルな配色スキームを生成、Calibre CSSスタイルをエクスポート',
   
+  presets: {
+    title: 'プリセット色系',
+  },
+  
   colorInput: {
     title: '色入力',
     hexLabel: 'HEX色値',

@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RGB, HarmonyScheme } from './types/color';
 import { generateRandomColor } from './utils/harmonySchemes';
+import { hexToRgb } from './utils/colorConversion';
 import ColorInput from './components/ColorInput';
 import ColorPreview from './components/ColorPreview';
+import ColorPresetSelector from './components/ColorPresetSelector';
 import PaletteSchemeItem from './components/PaletteSchemeItem';
 import TextPreview from './components/TextPreview';
 import SavedPalettes from './components/SavedPalettes';
 import { generateId, savePalette } from './utils/storage';
+import { ColorPreset } from './utils/colorPresets';
 
 const App: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [rgb, setRgb] = useState<RGB>({ r: 100, g: 150, b: 200 });
   const [savedNotification, setSavedNotification] = useState(false);
+  const [currentPresetId, setCurrentPresetId] = useState('default');
 
   const schemes: HarmonyScheme[] = [
     'triadic',
@@ -29,6 +33,7 @@ const App: React.FC = () => {
 
   const handleRandom = () => {
     setRgb(generateRandomColor());
+    setCurrentPresetId('');
   };
 
   const handleSave = (scheme: HarmonyScheme, colors: RGB[]) => {
@@ -43,6 +48,11 @@ const App: React.FC = () => {
     savePalette(palette);
     setSavedNotification(true);
     setTimeout(() => setSavedNotification(false), 2000);
+  };
+
+  const handlePresetSelect = (preset: ColorPreset) => {
+    setCurrentPresetId(preset.id);
+    setRgb(hexToRgb(preset.colors.primary));
   };
 
   const changeLanguage = (lng: string) => {
@@ -95,7 +105,11 @@ const App: React.FC = () => {
         
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
           <div className="xl:col-span-2 space-y-4">
-            <ColorInput rgb={rgb} onChange={setRgb} onRandom={handleRandom} />
+            <ColorPresetSelector
+              onSelect={handlePresetSelect}
+              currentPresetId={currentPresetId}
+            />
+            <ColorInput rgb={rgb} onChange={(r) => { setRgb(r); setCurrentPresetId(''); }} onRandom={handleRandom} />
             <ColorPreview rgb={rgb} />
           </div>
           

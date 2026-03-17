@@ -2,6 +2,10 @@ export default {
   title: '调色盘',
   subtitle: '输入颜色，生成专业配色方案，一键导出 Calibre 样式',
   
+  presets: {
+    title: '预设色系',
+  },
+  
   colorInput: {
     title: '颜色输入',
     hexLabel: 'HEX 颜色值',

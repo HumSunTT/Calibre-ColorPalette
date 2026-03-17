@@ -13,6 +13,14 @@
 
 ### ✨ 功能特点
 
+#### 🎨 预设色系
+
+内置 17 种精选色系，一键切换：
+- **中国传统色**：中国红、水墨黑、翡翠绿、紫禁城
+- **马卡龙色系**：马卡龙粉、马卡龙绿、马卡龙紫
+- **莫兰迪色系**：莫兰迪灰、莫兰迪蓝、莫兰迪绿
+- **其他风格**：复古米黄、海洋蓝、森林绿、日落橙、夜间模式、羊皮纸
+
 #### 🎯 核心功能
 
 - **实时颜色输入**：支持 RGB 滑块调节、HEX 输入、颜色选择器三种方式
@@ -110,6 +118,14 @@ A modern color palette tool that generates 10 professional color schemes from an
 ![Main Interface](main.png)
 
 ### ✨ Features
+
+#### 🎨 Color Presets
+
+17 curated color presets with one-click switching:
+- **Chinese Traditional**: Chinese Red, Ink Black, Jade Green, Forbidden Purple
+- **Macaron Series**: Macaron Pink, Macaron Mint, Macaron Lavender
+- **Morandi Series**: Morandi Gray, Morandi Blue, Morandi Green
+- **Other Styles**: Retro Cream, Ocean Blue, Forest Green, Sunset Orange, Night Mode, Sepia
 
 #### 🎯 Core Features
 

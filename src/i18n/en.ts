@@ -2,6 +2,10 @@ export default {
   title: 'Color Palette',
   subtitle: 'Generate professional color schemes, export Calibre CSS styles',
   
+  presets: {
+    title: 'Color Presets',
+  },
+  
   colorInput: {
     title: 'Color Input',
     hexLabel: 'HEX Color',
