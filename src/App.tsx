@@ -9,14 +9,17 @@ import ColorPresetSelector from './components/ColorPresetSelector';
 import PaletteSchemeItem from './components/PaletteSchemeItem';
 import TextPreview from './components/TextPreview';
 import SavedPalettes from './components/SavedPalettes';
+import ImageColorPicker from './components/ImageColorPicker';
 import { generateId, savePalette } from './utils/storage';
 import { ColorPreset } from './utils/colorPresets';
+import { useThemeStore } from './stores/themeStore';
 
 const App: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [rgb, setRgb] = useState<RGB>({ r: 100, g: 150, b: 200 });
   const [savedNotification, setSavedNotification] = useState(false);
   const [currentPresetId, setCurrentPresetId] = useState('default');
+  const { isDarkMode, toggleTheme } = useThemeStore();
 
   const schemes: HarmonyScheme[] = [
     'triadic',
@@ -55,20 +58,42 @@ const App: React.FC = () => {
     setRgb(hexToRgb(preset.colors.primary));
   };
 
+  const handleColorsExtracted = (colors: string[]) => {
+    if (colors.length > 0) {
+      const primaryColor = colors[0];
+      setRgb(hexToRgb(primaryColor));
+      setCurrentPresetId('');
+    }
+  };
+
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
 
   return (
-    <div className="min-h-screen py-6 px-4">
+    <div className={`min-h-screen py-6 px-4 transition-colors ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
       <div className="max-w-[1800px] mx-auto">
         <header className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            🎨 {t('title')}
-          </h1>
-          <p className="text-gray-400">
-            {t('subtitle')}
-          </p>
+          <div className="flex justify-between items-center">
+            <div className="flex-1"></div>
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">
+                🎨 {t('title')}
+              </h1>
+              <p className="text-gray-400">
+                {t('subtitle')}
+              </p>
+            </div>
+            <div className="flex-1 flex justify-end">
+              <button
+                onClick={toggleTheme}
+                className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors"
+                title={isDarkMode ? t('theme.lightMode') : t('theme.darkMode')}
+              >
+                {isDarkMode ? '☀️' : '🌙'}
+              </button>
+            </div>
+          </div>
           <div className="flex justify-center gap-2 mt-3">
             <button
               onClick={() => changeLanguage('zh')}
@@ -111,6 +136,7 @@ const App: React.FC = () => {
             />
             <ColorInput rgb={rgb} onChange={(r) => { setRgb(r); setCurrentPresetId(''); }} onRandom={handleRandom} />
             <ColorPreview rgb={rgb} />
+            <ImageColorPicker onColorsExtracted={handleColorsExtracted} />
           </div>
           
           <div className="xl:col-span-6">
