@@ -1,12 +1,19 @@
 # 🎨 调色盘 - 专业配色方案工具
 
+[English](#english) | [日本語](#日本語) | [中文](#中文)
+
+---
+
+<a name="中文"></a>
+## 中文
+
 一个现代化的颜色搭配工具，输入任意颜色，自动生成 10 种专业配色方案，支持样式编辑器自定义各元素颜色和特效，一键导出 Calibre 阅读器 CSS 样式，专为电子书阅读体验优化。
 
 ![主界面](main.png)
 
-## ✨ 功能特点
+### ✨ 功能特点
 
-### 🎯 核心功能
+#### 🎯 核心功能
 
 - **实时颜色输入**：支持 RGB 滑块调节、HEX 输入、颜色选择器三种方式
 - **随机颜色生成**：一键生成随机颜色，激发灵感
@@ -22,7 +29,7 @@
   - **五角色**：色环五等分，多彩均衡
   - **六色色环**：色环六等分，绚丽多彩
 
-### 📖 电子书预览
+#### 📖 电子书预览
 
 - **实时文字预览**：显示示例电子书内容，直观展示配色效果
 - **H1/H2/H3 标题样式**：章节标题、节标题、小节标题分别展示
@@ -30,30 +37,21 @@
 - **段落交替颜色**：奇偶段落使用不同颜色，增强阅读体验
 - **配色方案切换**：一键切换 10 种配色方案，实时预览效果
 
-### 🎨 样式编辑器
+#### 🎨 样式编辑器
 
 - **基础颜色调整**：背景色、主文字、次文字、链接、引用边框
-- **标题样式编辑** (H1/H2/H3)：
-  - 颜色选择
-  - 字号调节 (80%-200%)
-  - 加粗 / 斜体 / 下划线
+- **标题样式编辑** (H1/H2/H3)：颜色选择、字号调节、加粗/斜体/下划线
 - **首句强调样式**：颜色、字号、加粗等自定义
 - **实时预览**：编辑即时生效
 
-### 📦 Calibre 一键导出
+#### 📦 Calibre 一键导出
 
 - **完整 CSS 样式**：包含背景、文字、标题、链接、引用、表格等完整样式
 - **一键复制**：支持剪贴板复制和手动选择复制
 - **全选功能**：快速选中全部 CSS 代码
 - **详细使用教程**：内置 Calibre 设置步骤说明
 
-### 💾 数据管理
-
-- **一键保存**：保存喜欢的配色方案到本地存储
-- **配色历史**：查看已保存的所有配色方案
-- **一键复制**：点击颜色卡片即可复制 HEX 色值
-
-## 🛠️ 技术栈
+### 🛠️ 技术栈
 
 - **React 18** - 现代化的 UI 框架
 - **TypeScript** - 类型安全的 JavaScript
@@ -61,29 +59,22 @@
 - **Tailwind CSS** - 实用优先的 CSS 框架
 - **TinyColor2** - 强大的颜色处理库
 
-## 🚀 快速开始
-
-### 安装依赖
+### 🚀 快速开始
 
 ```bash
+# 安装依赖
 npm install
-```
 
-### 启动开发服务器
-
-```bash
+# 启动开发服务器
 npm run dev
+
+# 构建生产版本
+npm run build
 ```
 
 访问 http://localhost:5173 查看应用
 
-### 构建生产版本
-
-```bash
-npm run build
-```
-
-## 📦 Calibre 使用方法
+### 📦 Calibre 使用方法
 
 1. 在本工具中选择喜欢的颜色和配色方案
 2. 点击「🎨 编辑样式」自定义各元素颜色和特效
@@ -94,7 +85,7 @@ npm run build
 7. 将 CSS 粘贴到样式框中
 8. 点击应用，享受新配色！
 
-## 📖 配色方案说明
+### 📖 配色方案说明
 
 | 方案 | 颜色数 | 描述 | 适用场景 |
 |------|--------|------|----------|
@@ -109,15 +100,203 @@ npm run build
 | 五角色 | 5 | 色环五等分 | 多彩均衡 |
 | 六色色环 | 6 | 色环六等分 | 绚丽多彩 |
 
-## 📝 开发
+---
+
+<a name="english"></a>
+## English
+
+A modern color palette tool that generates 10 professional color schemes from any input color. Features a style editor for customizing element colors and effects, with one-click CSS export for Calibre e-reader, optimized for e-book reading experience.
+
+![Main Interface](main.png)
+
+### ✨ Features
+
+#### 🎯 Core Features
+
+- **Real-time Color Input**: RGB sliders, HEX input, and color picker
+- **Random Color Generation**: One-click random color for inspiration
+- **10 Professional Color Schemes**:
+  - **Triadic**: Three equidistant colors on the color wheel, rich and balanced
+  - **Square**: Four equidistant colors, providing rich color variations
+  - **Split-Complementary**: Base color + two colors adjacent to its complement
+  - **Monochromatic**: Different lightness of the same hue, simple and elegant
+  - **Double-Complementary**: Two pairs of complementary colors for rich contrast
+  - **Compound**: Analogous + complementary colors for complex harmony
+  - **Shades**: Same hue with different saturation, layered richness
+  - **Neutral**: Added gray tones for soft, subtle colors
+  - **Five-Tone**: Five equidistant colors for colorful balance
+  - **Six-Tone**: Six equidistant colors for vibrant variety
+
+#### 📖 E-book Preview
+
+- **Real-time Text Preview**: Sample e-book content with live color effects
+- **H1/H2/H3 Title Styles**: Chapter, section, and subsection titles displayed separately
+- **First Sentence Emphasis**: Auto-highlight first sentences
+- **Alternating Paragraph Colors**: Odd/even paragraphs with different colors
+- **Scheme Switching**: One-click switching between 10 schemes with live preview
+
+#### 🎨 Style Editor
+
+- **Basic Color Adjustment**: Background, primary text, secondary text, links, blockquote border
+- **Title Style Editing** (H1/H2/H3): Color, font size (80%-200%), bold/italic/underline
+- **First Sentence Emphasis Style**: Customizable color, size, and bold
+- **Real-time Preview**: Changes take effect immediately
+
+#### 📦 Calibre One-Click Export
+
+- **Complete CSS Styles**: Background, text, titles, links, quotes, tables, etc.
+- **One-Click Copy**: Clipboard copy and manual selection support
+- **Select All**: Quickly select all CSS code
+- **Detailed Tutorial**: Built-in Calibre setup instructions
+
+### 🛠️ Tech Stack
+
+- **React 18** - Modern UI framework
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Fast build tool
+- **Tailwind CSS** - Utility-first CSS framework
+- **TinyColor2** - Powerful color manipulation library
+
+### 🚀 Quick Start
 
 ```bash
-# 检查类型
-npx tsc --noEmit
+# Install dependencies
+npm install
 
-# 预览生产构建
-npm run preview
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
 ```
+
+Visit http://localhost:5173
+
+### 📦 Calibre Usage
+
+1. Select your favorite color and scheme
+2. Click "🎨 Edit Style" to customize colors and effects
+3. Click "📦 Export CSS" button
+4. Click "📋 Copy CSS" or "Select All" for manual copy
+5. Open Calibre e-reader
+6. Go to **Preferences** → **Look & Feel** → **Styles**
+7. Paste CSS into the style box
+8. Apply and enjoy your new colors!
+
+### 📖 Color Scheme Guide
+
+| Scheme | Colors | Description | Best For |
+|--------|--------|-------------|----------|
+| Triadic | 3 | Three equidistant colors | Lively, rich styles |
+| Square | 4 | Four equidistant colors | Complex, varied schemes |
+| Split-Complementary | 3 | Base + adjacent to complement | Balanced contrast |
+| Monochromatic | 5 | Same hue, different lightness | Simple, professional design |
+| Double-Complementary | 4 | Two complementary pairs | Rich contrast effects |
+| Compound | 4 | Analogous + complementary | Complex harmonious schemes |
+| Shades | 5 | Different saturation levels | Rich layering |
+| Neutral | 5 | Added gray tones | Soft, subtle appearance |
+| Five-Tone | 5 | Five equidistant colors | Colorful balance |
+| Six-Tone | 6 | Six equidistant colors | Vibrant variety |
+
+---
+
+<a name="日本語"></a>
+## 日本語
+
+任意の色を入力して10種類のプロフェッショナルな配色スキームを自動生成するモダンなカラーパレットツール。スタイルエディタで各要素の色とエフェクトをカスタマイズでき、Calibre電子書籍リーダー向けのCSSをワンクリックでエクスポート、電子書籍の読書体験に最適化されています。
+
+![メイン画面](main.png)
+
+### ✨ 機能
+
+#### 🎯 コア機能
+
+- **リアルタイム色入力**：RGBスライダー、HEX入力、カラーピッカーの3方式に対応
+- **ランダム色生成**：ワンクリックでランダムな色を生成、インスピレーションを刺激
+- **10種類のプロフェッショナル配色スキーム**：
+  - **トライアド**：色相環上で等間隔の3色、豊かでバランスの取れた配色
+  - **スクエア**：色相環上で等間隔の4色、豊かな色彩変化を提供
+  - **スプリットコンプリメンタリー**：ベース色＋補色の両隣の色
+  - **モノクロマティック**：同じ色相で異なる明度、シンプルでエレガント
+  - **ダブルコンプリメンタリー**：2組の補色、豊かなコントラスト効果
+  - **コンパウンド**：類似色＋補色の複雑で調和の取れた配色
+  - **シェード**：同じ色調で異なる彩度、豊かな階調
+  - **ニュートラル**：グレートーンを追加、柔らかく淡い色
+  - **ファイブトーン**：色相環を5等分、カラフルでバランスの取れた配色
+  - **シックストーン**：色相環を6等分、鮮やかで多彩な配色
+
+#### 📖 電子書籍プレビュー
+
+- **リアルタイムテキストプレビュー**：サンプル電子書籍コンテンツで配色効果を直感的に表示
+- **H1/H2/H3タイトルスタイル**：章タイトル、節タイトル、小節タイトルを個別に表示
+- **最初の文の強調**：最初の文を自動認識してハイライト表示
+- **段落の交互色**：奇数・偶数段落で異なる色を使用、読書体験を向上
+- **スキーム切り替え**：10種類の配色スキームをワンクリックで切り替え、リアルタイムプレビュー
+
+#### 🎨 スタイルエディタ
+
+- **基本色の調整**：背景色、メインテキスト、サブテキスト、リンク、引用枠線
+- **タイトルスタイル編集**（H1/H2/H3）：色選択、フォントサイズ調整、太字/斜体/下線
+- **最初の文の強調スタイル**：色、サイズ、太字などをカスタマイズ
+- **リアルタイムプレビュー**：編集が即座に反映
+
+#### 📦 Calibreワンクリックエクスポート
+
+- **完全なCSSスタイル**：背景、テキスト、タイトル、リンク、引用、テーブルなどを含む完全なスタイル
+- **ワンクリックコピー**：クリップボードコピーと手動選択コピーに対応
+- **全選択**：CSSコードを素早く全選択
+- **詳細なチュートリアル**：Calibre設定手順を内蔵
+
+### 🛠️ 技術スタック
+
+- **React 18** - モダンなUIフレームワーク
+- **TypeScript** - 型安全なJavaScript
+- **Vite** - 高速ビルドツール
+- **Tailwind CSS** - ユーティリティファーストCSSフレームワーク
+- **TinyColor2** - 強力な色操作ライブラリ
+
+### 🚀 クイックスタート
+
+```bash
+# 依存関係をインストール
+npm install
+
+# 開発サーバーを起動
+npm run dev
+
+# 本番用にビルド
+npm run build
+```
+
+http://localhost:5173 にアクセス
+
+### 📦 Calibreの使い方
+
+1. お気に入りの色とスキームを選択
+2. 「🎨 スタイル編集」で色とエフェクトをカスタマイズ
+3. 「📦 CSSエクスポート」ボタンをクリック
+4. 「📋 CSSをコピー」または「全選択」で手動コピー
+5. Calibre電子書籍リーダーを開く
+6. **環境設定** → **外観** → **スタイル** に移動
+7. CSSをスタイルボックスに貼り付け
+8. 適用して新しい配色をお楽しみください！
+
+### 📖 配色スキームガイド
+
+| スキーム | 色数 | 説明 | 適用シーン |
+|----------|------|------|------------|
+| トライアド | 3 | 等間隔の3色 | 活発で豊かなスタイル |
+| スクエア | 4 | 等間隔の4色 | 複雑で変化に富んだ配色 |
+| スプリットコンプリメンタリー | 3 | ベース色＋補色の両隣 | バランスの取れたコントラスト |
+| モノクロマティック | 5 | 同じ色相で異なる明度 | シンプルでプロフェッショナルなデザイン |
+| ダブルコンプリメンタリー | 4 | 2組の補色 | 豊かなコントラスト効果 |
+| コンパウンド | 4 | 類似色＋補色 | 複雑で調和の取れた配色 |
+| シェード | 5 | 異なる彩度レベル | 豊かな階調 |
+| ニュートラル | 5 | グレートーンを追加 | 柔らかく淡い外観 |
+| ファイブトーン | 5 | 5つの等間隔色 | カラフルなバランス |
+| シックストーン | 6 | 6つの等間隔色 | 鮮やかな多様性 |
+
+---
 
 ## 📄 License
 
