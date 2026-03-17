@@ -112,7 +112,45 @@ export default {
     tip: '💡 Click color card to copy, click "Export CSS" for reader styles',
   },
   
-  notification: {
-    saved: '✅ Palette saved!',
+  schemes: {
+    title: 'Color Schemes',
   },
+  
+  schemes: {
+    title: 'Color Schemes',
+    save: '💾 Save',
+    triadic: 'Triadic',
+    square: 'Square',
+    'split-complementary': 'Split-Comp',
+    monochromatic: 'Monochrome',
+    'double-complementary': 'Double-Comp'
+    compound: 'Compound',
+    shades: 'Shades'
+    neutral: 'Neutral'
+    'five-tone': 'Five-Tone'
+    'six-tone': 'Six-Tone'
+  },
+  
+  schemeDescriptions: {
+    triadic: 'Three equidistant colors, balanced',
+    square: 'Four equidistant colors, varied',
+    'split-complementary': 'Base + adjacent to complement',
+    monochromatic: 'Same hue, different lightness',
+    'double-complementary': 'Two complementary pairs'
+    compound: 'Analogous + complementary'
+    shades: 'Same hue, different saturation'
+    neutral: 'Gray tones added, soft and muted
+    'five-tone': 'Five equidistant colors'
+    'six-tone': 'Six equidistant colors',
+  },
+  
+  sampleText: {
+    chapter: '第一章 出会',
+    section1: '第一节 相逢',
+    paragraph1: 'It was a late autumn evening. The setting sun cast its golden light on the ancient stone road. Lin Xiao stood before the café window, watching the hurried passersby, a strange anticipation rising in her heart.',
+    dialog: '"Your latte, enjoy," the server said softly, interrupting her wandering thoughts.',
+    paragraph2: 'Lin Xiao smiled as she took the coffee, her gaze inadvertently fell on a quiet figure in the corner. That person was intently reading a yellowed old book, as if the surrounding noise had nothing to do with them.'
+    section2: '第二节 心动',
+    paragraph3: 'At that moment, fate quietly turned its wheel. She never imagined that a chance encounter would change her life's trajectory. Outside, the autumn breeze gently blew, sweeping up a few golden leaves that the air and spiraling into the distance.',
+  }
 };
