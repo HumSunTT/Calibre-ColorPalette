@@ -31,7 +31,7 @@ const PaletteSchemeItem: React.FC<PaletteSchemeItemProps> = ({ baseColor, scheme
         </button>
       </div>
       
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {colors.map((color, index) => (
           <ColorCard key={index} rgb={color} />
         ))}
@@ -48,6 +48,12 @@ const getSchemeDescription = (scheme: HarmonyScheme): string => {
     'square': '色环等距四色，变化丰富',
     'split-complementary': '主色+互补两侧色，对比和谐',
     'monochromatic': '同色相不同明度，简洁优雅',
+    'double-complementary': '两组互补色，丰富对比',
+    'compound': '类比+互补，复杂和谐',
+    'shades': '同色调不同饱和度，层次丰富',
+    'neutral': '加入灰色调，柔和淡雅',
+    'five-tone': '色环五等分，多彩均衡',
+    'six-tone': '色环六等分，绚丽多彩',
   };
   
   return descriptions[scheme];

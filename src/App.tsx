@@ -14,12 +14,16 @@ const App: React.FC = () => {
   const [savedNotification, setSavedNotification] = useState(false);
 
   const schemes: HarmonyScheme[] = [
-    'complementary',
-    'analogous',
     'triadic',
     'square',
     'split-complementary',
     'monochromatic',
+    'double-complementary',
+    'compound',
+    'shades',
+    'neutral',
+    'five-tone',
+    'six-tone',
   ];
 
   const handleRandom = () => {
@@ -42,7 +46,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen py-6 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1800px] mx-auto">
         <header className="text-center mb-6">
           <h1 className="text-4xl font-bold text-white mb-2">
             🎨 调色盘
@@ -58,26 +62,28 @@ const App: React.FC = () => {
           </div>
         )}
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-3 space-y-4">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+          <div className="xl:col-span-2 space-y-4">
             <ColorInput rgb={rgb} onChange={setRgb} onRandom={handleRandom} />
             <ColorPreview rgb={rgb} />
           </div>
           
-          <div className="lg:col-span-5">
+          <div className="xl:col-span-6">
             <TextPreview baseColor={rgb} />
           </div>
           
-          <div className="lg:col-span-4 space-y-3">
+          <div className="xl:col-span-4 space-y-3">
             <h2 className="text-lg font-bold text-white">配色方案</h2>
-            {schemes.map((scheme) => (
-              <PaletteSchemeItem
-                key={scheme}
-                baseColor={rgb}
-                scheme={scheme}
-                onSave={handleSave}
-              />
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {schemes.map((scheme) => (
+                <PaletteSchemeItem
+                  key={scheme}
+                  baseColor={rgb}
+                  scheme={scheme}
+                  onSave={handleSave}
+                />
+              ))}
+            </div>
           </div>
         </div>
         

@@ -29,10 +29,10 @@ const ColorCard: React.FC<ColorCardProps> = ({ rgb }) => {
       title={`${hex} - 点击复制`}
     >
       <div 
-        className="h-16 sm:h-20 flex items-center justify-center"
+        className="h-14 flex items-center justify-center"
       >
         <span 
-          className="text-xs sm:text-sm font-mono font-medium px-1"
+          className="text-sm font-mono font-medium px-2"
           style={{ color: textColor }}
         >
           {hex}

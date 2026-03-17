@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RGB, HarmonyScheme, HARMONY_NAMES } from '../types/color';
 import { generateHarmony } from '../utils/harmonySchemes';
-import { rgbToHex, getContrastColor } from '../utils/colorConversion';
-import { rgbToCssString, copyToClipboard } from '../utils/storage';
+import { copyToClipboard } from '../utils/storage';
+import StyleEditor, { StyleSettings, createDefaultStyleSettings, TextStyle } from './StyleEditor';
 
 interface TextPreviewProps {
   baseColor: RGB;
@@ -10,93 +10,199 @@ interface TextPreviewProps {
 
 const SAMPLE_TEXT = `第一章 初遇
 
-那是一个深秋的傍晚，夕阳的余晖洒落在古老的石板路上，为这座小城镀上了一层金色的光芒。林晓站在咖啡馆的玻璃窗前，望着窗外匆匆走过的行人，心中泛起一丝莫名的期待。
+第一节 相逢
+
+那是一个深秋的傍晚，夕阳的余晖洒落在古老的石板路上。林晓站在咖啡馆的玻璃窗前，望着窗外匆匆走过的行人，心中泛起一丝莫名的期待。
 
 "您的拿铁，请慢用。"服务员轻声说道，打断了她纷飞的思绪。
 
-"谢谢。"林晓微笑着接过咖啡，目光却不经意间扫过角落里那个安静的身影。那个人正专注地翻阅着一本泛黄的旧书，仿佛周围的喧嚣与他毫无关系。
+林晓微笑着接过咖啡，目光却不经意间扫过角落里那个安静的身影。那个人正专注地翻阅着一本泛黄的旧书，仿佛周围的喧嚣与他毫无关系。
 
-就在这一刻，命运悄然转动……`;
+第二节 心动
+
+就在这一刻，命运悄然转动。她从未想过，一个偶然的邂逅，竟会改变她此后的人生轨迹。窗外秋风轻拂，卷起几片金黄的落叶，在空中打着旋儿飘向远方。`;
 
 const schemes: HarmonyScheme[] = [
-  'complementary',
-  'analogous',
   'triadic',
   'square',
   'split-complementary',
   'monochromatic',
+  'double-complementary',
+  'compound',
+  'shades',
+  'neutral',
+  'five-tone',
+  'six-tone',
 ];
 
-const generateCalibreCSS = (bgColor: RGB, textColor: string, accentColor: RGB): string => {
-  const bgHex = rgbToHex(bgColor);
-  const accentHex = rgbToHex(accentColor);
-  
-  return `/* Calibre 阅读器样式 - 配色方案 */
+const generateCalibreCSS = (settings: StyleSettings): string => {
+  const h1Style = settings.h1;
+  const h2Style = settings.h2;
+  const h3Style = settings.h3;
+  const firstStyle = settings.firstSentence;
+
+  const h1Decor = h1Style.underline ? 'underline' : 'none';
+  const h2Decor = h2Style.underline ? 'underline' : 'none';
+  const h3Decor = h3Style.underline ? 'underline' : 'none';
+  const firstDecor = firstStyle.underline ? 'underline' : 'none';
+
+  return `/* Calibre 阅读器样式 */
 /* 使用方法：Calibre -> 首选项 -> 外观 -> 样式 -> 粘贴此CSS */
 
+:root {
+  --bg-primary: ${settings.bg};
+  --text-primary: ${settings.text};
+  --text-secondary: ${settings.textSecondary};
+  --h1-color: ${h1Style.color};
+  --h2-color: ${h2Style.color};
+  --h3-color: ${h3Style.color};
+  --first-sentence: ${firstStyle.color};
+  --link-color: ${settings.link};
+  --blockquote-color: ${settings.blockquote};
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    background-color: ${bgHex};
-    color: ${textColor};
-    font-family: "Noto Serif CJK SC", "Source Han Serif CN", "宋体", serif;
-    line-height: 1.8;
-    padding: 20px 30px;
+  font-family: "Noto Serif CJK SC", "Source Han Serif CN", "宋体", serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5em 1.5em;
+  text-align: justify;
 }
 
-h1, h2, h3 {
-    color: ${accentHex};
-    margin-top: 1.5em;
-    margin-bottom: 0.8em;
+/* H1 章节标题 */
+h1, .chaptertitle-c-2 {
+  color: ${h1Style.color};
+  font-size: ${h1Style.fontSize / 100}em;
+  font-weight: ${h1Style.bold ? 700 : 400};
+  font-style: ${h1Style.italic ? 'italic' : 'normal'};
+  text-decoration: ${h1Decor};
+  text-align: center;
+  margin: 1.5em 0 1em;
+  padding: 0.5em;
+  background: linear-gradient(90deg, ${h1Style.color}20 0%, transparent 50%, ${h1Style.color}20 100%);
+  border-top: 2px solid ${h1Style.color};
+  border-bottom: 2px solid ${h1Style.color};
 }
 
-h1 { font-size: 1.8em; }
-h2 { font-size: 1.5em; }
-h3 { font-size: 1.3em; }
-
-p {
-    text-indent: 2em;
-    margin: 0.8em 0;
+/* H2 节标题 */
+h2, .sectitle-c-2 {
+  color: ${h2Style.color};
+  font-size: ${h2Style.fontSize / 100}em;
+  font-weight: ${h2Style.bold ? 700 : 400};
+  font-style: ${h2Style.italic ? 'italic' : 'normal'};
+  text-decoration: ${h2Decor};
+  margin: 1.2em 0 0.8em;
+  padding: 0.5em 0.8em;
+  border-left: 4px solid ${h2Style.color};
+  background: linear-gradient(90deg, ${h2Style.color}15 0%, transparent 100%);
 }
 
+/* H3 小节标题 */
+h3 {
+  color: ${h3Style.color};
+  font-size: ${h3Style.fontSize / 100}em;
+  font-weight: ${h3Style.bold ? 700 : 400};
+  font-style: ${h3Style.italic ? 'italic' : 'normal'};
+  text-decoration: ${h3Decor};
+  margin: 1em 0 0.6em;
+}
+
+/* 正文段落 */
+p, .bodyContent-1 {
+  color: var(--text-primary);
+  text-indent: 2em;
+  line-height: 1.75;
+  margin-bottom: 1.5em;
+  text-align: justify;
+}
+
+/* 段落交替颜色 */
+p:nth-child(odd), .bodyContent-1:nth-child(odd) {
+  color: var(--text-primary);
+}
+
+p:nth-child(even), .bodyContent-1:nth-child(even) {
+  color: var(--text-secondary);
+}
+
+/* 段落首句强调 */
+p b:first-child,
+p strong:first-child,
+.bodyContent-1 b:first-child,
+.bodyContent-1 strong:first-child {
+  color: ${firstStyle.color};
+  font-size: ${firstStyle.fontSize / 100}em;
+  font-weight: ${firstStyle.bold ? 700 : 400};
+  font-style: ${firstStyle.italic ? 'italic' : 'normal'};
+  text-decoration: ${firstDecor};
+  display: inline-block;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border-left: 3px solid ${firstStyle.color};
+  margin-right: 0.3em;
+}
+
+/* 加粗 */
+b, strong {
+  color: ${h1Style.color};
+  font-weight: 700;
+}
+
+/* 链接 */
 a {
-    color: ${accentHex};
-    text-decoration: none;
+  color: ${settings.link};
+  text-decoration: none;
+  border-bottom: 1px dashed ${settings.link};
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
+/* 引用 */
 blockquote {
-    border-left: 3px solid ${accentHex};
-    margin: 1em 0;
-    padding: 0.5em 1em;
-    background-color: rgba(255,255,255,0.05);
+  border-left: 3px solid ${settings.blockquote};
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  background-color: rgba(0,0,0,0.05);
+  color: var(--text-secondary);
 }
 
+/* 代码 */
 code, pre {
-    background-color: rgba(0,0,0,0.2);
-    padding: 2px 6px;
-    border-radius: 4px;
+  background-color: rgba(0,0,0,0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
 }
 
+/* 分隔线 */
 hr {
-    border: none;
-    border-top: 1px solid ${accentHex}40;
-    margin: 2em 0;
+  border: none;
+  border-top: 1px solid ${h1Style.color}40;
+  margin: 2em 0;
 }
 
+/* 表格 */
 table {
-    border-collapse: collapse;
-    margin: 1em auto;
+  border-collapse: collapse;
+  margin: 1em auto;
 }
 
 th, td {
-    border: 1px solid ${accentHex}60;
-    padding: 8px 12px;
+  border: 1px solid ${h1Style.color}40;
+  padding: 8px 12px;
 }
 
 th {
-    background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.1);
+  color: ${h1Style.color};
 }`;
 };
 
@@ -104,28 +210,77 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
   const [selectedScheme, setSelectedScheme] = useState<HarmonyScheme>('complementary');
   const [copied, setCopied] = useState<string | null>(null);
   const [showCSSModal, setShowCSSModal] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const [styleSettings, setStyleSettings] = useState<StyleSettings | null>(null);
 
   const { colors } = generateHarmony(baseColor, selectedScheme);
-  
-  const bgColor = colors[0];
-  const textColor = getContrastColor(bgColor);
-  const accentColor = colors[1] || colors[0];
-  const calibreCSS = generateCalibreCSS(bgColor, textColor, accentColor);
+
+  useEffect(() => {
+    setStyleSettings(createDefaultStyleSettings(colors));
+  }, [baseColor, selectedScheme]);
+
+  if (!styleSettings) return null;
+
+  const calibreCSS = generateCalibreCSS(styleSettings);
 
   const handleCopy = async (text: string, type: string) => {
     const success = await copyToClipboard(text);
     if (success) {
       setCopied(type);
       setTimeout(() => setCopied(null), 1500);
+    } else {
+      alert('复制失败，请手动复制');
     }
   };
 
-  const handleCopyCSS = (type: string) => {
-    let cssCode = '';
-    if (type === 'simple') {
-      cssCode = `background-color: ${rgbToHex(bgColor)};\ncolor: ${textColor};`;
+  const paragraphs = SAMPLE_TEXT.split('\n\n').filter(p => p.trim());
+
+  const getTextStyleCSS = (style: TextStyle): React.CSSProperties => ({
+    color: style.color,
+    fontWeight: style.bold ? 700 : 400,
+    fontStyle: style.italic ? 'italic' : 'normal',
+    textDecoration: style.underline ? 'underline' : 'none',
+    fontSize: `${style.fontSize}%`,
+  });
+
+  const renderParagraph = (text: string, index: number) => {
+    if (text.startsWith('第') && text.includes('章')) {
+      return (
+        <h1 key={index} style={getTextStyleCSS(styleSettings.h1)}>
+          {text}
+        </h1>
+      );
     }
-    handleCopy(cssCode, type);
+    if (text.startsWith('第') && text.includes('节')) {
+      return (
+        <h2 key={index} style={getTextStyleCSS(styleSettings.h2)}>
+          {text}
+        </h2>
+      );
+    }
+    
+    const isEven = index % 2 === 0;
+    const textColor = isEven ? styleSettings.text : styleSettings.textSecondary;
+    
+    let content = text;
+    const hasFirstSentence = text.length > 20 && !text.startsWith('"');
+    
+    if (hasFirstSentence) {
+      const firstSentenceEnd = text.search(/[。！？，、]/);
+      if (firstSentenceEnd > 0 && firstSentenceEnd < 30) {
+        const firstSentence = text.slice(0, firstSentenceEnd + 1);
+        const rest = text.slice(firstSentenceEnd + 1);
+        content = `<b style="color:${styleSettings.firstSentence.color};font-weight:${styleSettings.firstSentence.bold ? 700 : 400}">${firstSentence}</b>${rest}`;
+      }
+    }
+    
+    return (
+      <p 
+        key={index} 
+        style={{ color: textColor }}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   };
 
   return (
@@ -134,10 +289,18 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
         <h2 className="text-xl font-bold text-white">📖 电子书预览</h2>
         <div className="flex gap-2">
           <button
+            onClick={() => setShowEditor(!showEditor)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              showEditor ? 'bg-yellow-600 text-white' : 'bg-gray-600 text-gray-200 hover:bg-gray-500'
+            }`}
+          >
+            🎨 编辑样式
+          </button>
+          <button
             onClick={() => setShowCSSModal(true)}
             className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-sm font-medium transition-colors"
           >
-            📦 导出 Calibre CSS
+            📦 导出 CSS
           </button>
         </div>
       </div>
@@ -158,77 +321,62 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
         ))}
       </div>
 
-      <div
-        className="rounded-xl p-6 shadow-xl transition-all duration-300 cursor-pointer"
-        style={{ backgroundColor: rgbToCssString(bgColor) }}
-        onClick={() => handleCopyCSS('simple')}
-        title="点击复制简单CSS"
-      >
-        <div 
-          className="prose max-w-none"
-          style={{ color: textColor }}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div
+          className="rounded-xl p-6 shadow-xl transition-all duration-300 min-h-[500px]"
+          style={{ backgroundColor: styleSettings.bg }}
         >
-          <h1 
-            className="text-2xl font-bold mb-4"
-            style={{ color: rgbToCssString(accentColor) }}
-          >
-            示例章节
-          </h1>
-          <div className="text-base leading-relaxed whitespace-pre-wrap font-serif">
-            {SAMPLE_TEXT}
+          <div className="prose max-w-none font-serif">
+            {paragraphs.map((p, i) => renderParagraph(p, i))}
           </div>
         </div>
+
+        {showEditor && (
+          <StyleEditor
+            settings={styleSettings}
+            onChange={setStyleSettings}
+          />
+        )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-4 gap-2">
         <div 
-          className="rounded-lg p-3 cursor-pointer hover:opacity-80 transition-opacity"
-          style={{ backgroundColor: rgbToCssString(bgColor) }}
-          onClick={() => handleCopy(rgbToHex(bgColor), 'bg')}
-          title="点击复制"
+          className="rounded-lg p-2 cursor-pointer hover:opacity-80 transition-opacity text-center"
+          style={{ backgroundColor: styleSettings.bg, color: styleSettings.text }}
+          onClick={() => handleCopy(styleSettings.bg, 'bg')}
         >
-          <div className="text-xs opacity-70" style={{ color: textColor }}>背景色</div>
-          <div className="font-mono font-medium" style={{ color: textColor }}>
-            {rgbToHex(bgColor)}
-          </div>
-          {copied === 'bg' && (
-            <div className="text-xs mt-1" style={{ color: textColor }}>✓ 已复制</div>
-          )}
+          <div className="text-xs opacity-70">背景</div>
+          <div className="font-mono text-xs">{styleSettings.bg}</div>
         </div>
         <div 
-          className="rounded-lg p-3 cursor-pointer hover:opacity-80 transition-opacity"
-          style={{ backgroundColor: textColor }}
-          onClick={() => handleCopy(textColor, 'text')}
-          title="点击复制"
+          className="rounded-lg p-2 cursor-pointer hover:opacity-80 transition-opacity text-center"
+          style={{ backgroundColor: styleSettings.text, color: styleSettings.bg }}
+          onClick={() => handleCopy(styleSettings.text, 'text')}
         >
-          <div className="text-xs opacity-70" style={{ color: rgbToCssString(bgColor) }}>文字色</div>
-          <div className="font-mono font-medium" style={{ color: rgbToCssString(bgColor) }}>
-            {textColor}
-          </div>
-          {copied === 'text' && (
-            <div className="text-xs mt-1" style={{ color: rgbToCssString(bgColor) }}>✓ 已复制</div>
-          )}
+          <div className="text-xs opacity-70">文字</div>
+          <div className="font-mono text-xs">{styleSettings.text}</div>
         </div>
-      </div>
-
-      <div className="bg-gray-800/50 rounded-lg p-3">
-        <div className="text-xs text-gray-400 mb-2">当前方案所有颜色</div>
-        <div className="flex gap-2">
-          {colors.map((color, index) => (
-            <div
-              key={index}
-              className="flex-1 h-8 rounded cursor-pointer hover:scale-105 transition-transform"
-              style={{ backgroundColor: rgbToCssString(color) }}
-              onClick={() => handleCopy(rgbToHex(color), `color-${index}`)}
-              title={`${rgbToHex(color)} - 点击复制`}
-            />
-          ))}
+        <div 
+          className="rounded-lg p-2 cursor-pointer hover:opacity-80 transition-opacity text-center"
+          style={{ backgroundColor: styleSettings.h1.color, color: '#fff' }}
+          onClick={() => handleCopy(styleSettings.h1.color, 'h1')}
+        >
+          <div className="text-xs opacity-70">H1</div>
+          <div className="font-mono text-xs">{styleSettings.h1.color}</div>
+        </div>
+        <div 
+          className="rounded-lg p-2 cursor-pointer hover:opacity-80 transition-opacity text-center"
+          style={{ backgroundColor: styleSettings.h2.color, color: '#fff' }}
+          onClick={() => handleCopy(styleSettings.h2.color, 'h2')}
+        >
+          <div className="text-xs opacity-70">H2</div>
+          <div className="font-mono text-xs">{styleSettings.h2.color}</div>
         </div>
       </div>
 
       {showCSSModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" onClick={() => setShowCSSModal(false)}>
-          <div className="bg-gray-800 rounded-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="bg-gray-800 rounded-xl p-6 max-w-3xl w-full max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-white">📦 Calibre CSS 样式</h3>
               <button 
@@ -240,7 +388,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
             </div>
             
             <div className="bg-gray-900 rounded-lg p-4 mb-4 overflow-x-auto">
-              <pre className="text-green-400 text-sm whitespace-pre-wrap">{calibreCSS}</pre>
+              <pre className="text-green-400 whitespace-pre-wrap text-xs select-all">{calibreCSS}</pre>
             </div>
             
             <div className="flex gap-3">
@@ -250,17 +398,32 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
               >
                 {copied === 'calibre' ? '✓ 已复制到剪贴板' : '📋 一键复制 CSS'}
               </button>
+              <button
+                onClick={() => {
+                  const pre = document.querySelector('.select-all') as HTMLElement;
+                  if (pre) {
+                    const selection = window.getSelection();
+                    const range = document.createRange();
+                    range.selectNodeContents(pre);
+                    selection?.removeAllRanges();
+                    selection?.addRange(range);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors"
+              >
+                全选
+              </button>
             </div>
             
             <div className="mt-4 text-sm text-gray-400 space-y-2">
               <p className="font-medium text-white">使用方法：</p>
               <ol className="list-decimal list-inside space-y-1">
                 <li>打开 Calibre 阅读器</li>
-                <li>点击 <code className="bg-gray-700 px-1 rounded">首选项</code> → <code className="bg-gray-700 px-1 rounded">外观</code></li>
-                <li>选择 <code className="bg-gray-700 px-1 rounded">样式</code> 选项卡</li>
-                <li>将复制的 CSS 粘贴到样式框中</li>
-                <li>点击应用，享受新配色！</li>
+                <li>首选项 → 外观 → 样式</li>
+                <li>粘贴 CSS 到样式框</li>
+                <li>点击应用</li>
               </ol>
+              <p className="text-xs text-gray-500 mt-2">提示：CSS 代码可直接选中复制</p>
             </div>
           </div>
         </div>

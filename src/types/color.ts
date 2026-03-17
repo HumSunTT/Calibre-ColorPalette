@@ -16,7 +16,13 @@ export type HarmonyScheme =
   | 'triadic'
   | 'square'
   | 'split-complementary'
-  | 'monochromatic';
+  | 'monochromatic'
+  | 'double-complementary'
+  | 'compound'
+  | 'shades'
+  | 'neutral'
+  | 'five-tone'
+  | 'six-tone';
 
 export interface ColorInfo {
   rgb: RGB;
@@ -37,6 +43,12 @@ export const HARMONY_NAMES: Record<HarmonyScheme, string> = {
   'analogous': '类比色',
   'triadic': '三角色',
   'square': '四角色',
-  'split-complementary': '分裂互补色',
+  'split-complementary': '分裂互补',
   'monochromatic': '单色系',
+  'double-complementary': '双互补色',
+  'compound': '复合色',
+  'shades': '阴影色',
+  'neutral': '中性色',
+  'five-tone': '五角色',
+  'six-tone': '六色色环',
 };

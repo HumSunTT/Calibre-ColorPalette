@@ -29,6 +29,24 @@ export const generateHarmony = (baseColor: RGB, scheme: HarmonyScheme): HarmonyR
     case 'monochromatic':
       colors = generateMonochromatic(hsl);
       break;
+    case 'double-complementary':
+      colors = generateDoubleComplementary(hsl);
+      break;
+    case 'compound':
+      colors = generateCompound(hsl);
+      break;
+    case 'shades':
+      colors = generateShades(hsl);
+      break;
+    case 'neutral':
+      colors = generateNeutral(hsl);
+      break;
+    case 'five-tone':
+      colors = generateFiveTone(hsl);
+      break;
+    case 'six-tone':
+      colors = generateSixTone(hsl);
+      break;
     default:
       colors = [baseColor];
   }
@@ -100,6 +118,77 @@ const generateMonochromatic = (hsl: { h: number; s: number; l: number }): RGB[] 
   
   lightnessSteps.forEach(lightness => {
     colors.push(hslToRgb({ h: hsl.h, s: hsl.s, l: lightness }));
+  });
+  
+  return colors;
+};
+
+const generateDoubleComplementary = (hsl: { h: number; s: number; l: number }): RGB[] => {
+  const colors: RGB[] = [];
+  const baseHue = hsl.h;
+  const secondHue = (baseHue + 30) % 360;
+  
+  colors.push(hslToRgb({ h: baseHue, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: (baseHue + 180) % 360, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: secondHue, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: (secondHue + 180) % 360, s: hsl.s, l: hsl.l }));
+  
+  return colors;
+};
+
+const generateCompound = (hsl: { h: number; s: number; l: number }): RGB[] => {
+  const colors: RGB[] = [];
+  
+  colors.push(hslToRgb({ h: hsl.h, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: (hsl.h + 30) % 360, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: (hsl.h + 180) % 360, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: (hsl.h + 210) % 360, s: hsl.s, l: hsl.l }));
+  
+  return colors;
+};
+
+const generateShades = (hsl: { h: number; s: number; l: number }): RGB[] => {
+  const colors: RGB[] = [];
+  const saturationSteps = [100, 80, 60, 40, 20];
+  
+  saturationSteps.forEach(saturation => {
+    colors.push(hslToRgb({ h: hsl.h, s: saturation, l: hsl.l }));
+  });
+  
+  return colors;
+};
+
+const generateNeutral = (hsl: { h: number; s: number; l: number }): RGB[] => {
+  const colors: RGB[] = [];
+  
+  colors.push(hslToRgb({ h: hsl.h, s: hsl.s, l: hsl.l }));
+  colors.push(hslToRgb({ h: hsl.h, s: Math.max(10, hsl.s - 30), l: hsl.l }));
+  colors.push(hslToRgb({ h: hsl.h, s: Math.max(5, hsl.s - 50), l: hsl.l }));
+  colors.push(hslToRgb({ h: (hsl.h + 180) % 360, s: Math.max(10, hsl.s - 30), l: hsl.l }));
+  colors.push(hslToRgb({ h: 0, s: 0, l: hsl.l }));
+  
+  return colors;
+};
+
+const generateFiveTone = (hsl: { h: number; s: number; l: number }): RGB[] => {
+  const colors: RGB[] = [];
+  const hueSteps = [0, 72, 144, 216, 288];
+  
+  hueSteps.forEach(step => {
+    const hue = (hsl.h + step) % 360;
+    colors.push(hslToRgb({ h: hue, s: hsl.s, l: hsl.l }));
+  });
+  
+  return colors;
+};
+
+const generateSixTone = (hsl: { h: number; s: number; l: number }): RGB[] => {
+  const colors: RGB[] = [];
+  const hueSteps = [0, 60, 120, 180, 240, 300];
+  
+  hueSteps.forEach(step => {
+    const hue = (hsl.h + step) % 360;
+    colors.push(hslToRgb({ h: hue, s: hsl.s, l: hsl.l }));
   });
   
   return colors;
