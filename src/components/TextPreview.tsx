@@ -4,6 +4,7 @@ import { RGB, HarmonyScheme } from '../types/color';
 import { generateHarmony } from '../utils/harmonySchemes';
 import { copyToClipboard } from '../utils/storage';
 import StyleEditor, { StyleSettings, createDefaultStyleSettings, TextStyle } from './StyleEditor';
+import { cssTemplates, getTemplateById } from '../data/cssTemplates';
 
 interface TextPreviewProps {
   baseColor: RGB;
@@ -25,6 +26,7 @@ const schemes: HarmonyScheme[] = [
 const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
   const { t } = useTranslation();
   const [selectedScheme, setSelectedScheme] = useState<HarmonyScheme>('triadic');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('novel');
   const [copied, setCopied] = useState<string | null>(null);
   const [showCSSModal, setShowCSSModal] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
@@ -38,7 +40,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
 
   if (!styleSettings) return null;
 
-  const calibreCSS = generateCalibreCSS(styleSettings);
+  const calibreCSS = generateCalibreCSS(styleSettings, selectedTemplate);
 
   const handleCopy = async (text: string, type: string) => {
     const success = await copyToClipboard(text);
@@ -145,6 +147,26 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
             {t(`schemes.${scheme}`)}
           </button>
         ))}
+      </div>
+
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-gray-400">{t('templates.title')}:</span>
+        <div className="flex flex-wrap gap-2">
+          {cssTemplates.map((template) => (
+            <button
+              key={template.id}
+              onClick={() => setSelectedTemplate(template.id)}
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
+                selectedTemplate === template.id
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
+              title={t(template.descriptionKey)}
+            >
+              {t(template.nameKey)}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -258,139 +280,12 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
   );
 };
 
-const generateCalibreCSS = (settings: StyleSettings): string => {
-  const h1Style = settings.h1;
-  const h2Style = settings.h2;
-  const h3Style = settings.h3;
-  const firstStyle = settings.firstSentence;
-
-  const h1Decor = h1Style.underline ? 'underline' : 'none';
-  const h2Decor = h2Style.underline ? 'underline' : 'none';
-  const h3Decor = h3Style.underline ? 'underline' : 'none';
-  const firstDecor = firstStyle.underline ? 'underline' : 'none';
-
-  return `/* Calibre CSS Styles */
-:root {
-  --bg-primary: ${settings.bg};
-  --text-primary: ${settings.text};
-  --text-secondary: ${settings.textSecondary};
-  --h1-color: ${h1Style.color};
-  --h2-color: ${h2Style.color};
-  --h3-color: ${h3Style.color};
-  --first-sentence: ${firstStyle.color};
-  --link-color: ${settings.link};
-  --blockquote-color: ${settings.blockquote};
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Noto Serif CJK SC", "Source Han Serif CN", serif;
-  font-size: 1rem;
-  line-height: 1.75;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 2.5em 1.5em;
-  text-align: justify;
-}
-
-h1 {
-  color: ${h1Style.color};
-  font-size: ${h1Style.fontSize / 100}em;
-  font-weight: ${h1Style.bold ? 700 : 400};
-  font-style: ${h1Style.italic ? 'italic' : 'normal'};
-  text-decoration: ${h1Decor};
-  text-align: center;
-  margin: 1.5em 0 1em;
-  padding: 0.5em;
-  background: linear-gradient(90deg, ${h1Style.color}20 0%, transparent 50%, ${h1Style.color}20 100%);
-  border-top: 2px solid ${h1Style.color};
-  border-bottom: 2px solid ${h1Style.color};
-}
-
-h2 {
-  color: ${h2Style.color};
-  font-size: ${h2Style.fontSize / 100}em;
-  font-weight: ${h2Style.bold ? 700 : 400};
-  font-style: ${h2Style.italic ? 'italic' : 'normal'};
-  text-decoration: ${h2Decor};
-  margin: 1.2em 0 0.8em;
-  padding: 0.5em 0.8em;
-  border-left: 4px solid ${h2Style.color};
-  background: linear-gradient(90deg, ${h2Style.color}15 0%, transparent 100%);
-}
-
-h3 {
-  color: ${h3Style.color};
-  font-size: ${h3Style.fontSize / 100}em;
-  font-weight: ${h3Style.bold ? 700 : 400};
-  font-style: ${h3Style.italic ? 'italic' : 'normal'};
-  text-decoration: ${h3Decor};
-  margin: 1em 0 0.6em;
-}
-
-p {
-  color: var(--text-primary);
-  text-indent: 2em;
-  line-height: 1.75;
-  margin-bottom: 1.5em;
-  text-align: justify;
-}
-
-p:nth-child(odd) { color: var(--text-primary); }
-p:nth-child(even) { color: var(--text-secondary); }
-
-p b:first-child, p strong:first-child {
-  color: ${firstStyle.color};
-  font-size: ${firstStyle.fontSize / 100}em;
-  font-weight: ${firstStyle.bold ? 700 : 400};
-  font-style: ${firstStyle.italic ? 'italic' : 'normal'};
-  text-decoration: ${firstDecor};
-  display: inline-block;
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-  border-left: 3px solid ${firstStyle.color};
-  margin-right: 0.3em;
-}
-
-b, strong { color: ${h1Style.color}; font-weight: 700; }
-
-a {
-  color: ${settings.link};
-  text-decoration: none;
-  border-bottom: 1px dashed ${settings.link};
-}
-
-blockquote {
-  border-left: 3px solid ${settings.blockquote};
-  margin: 1em 0;
-  padding: 0.5em 1em;
-  background-color: rgba(0,0,0,0.05);
-  color: var(--text-secondary);
-}
-
-code, pre {
-  background-color: rgba(0,0,0,0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: monospace;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid ${h1Style.color}40;
-  margin: 2em 0;
-}
-
-table { border-collapse: collapse; margin: 1em auto; }
-th, td { border: 1px solid ${h1Style.color}40; padding: 8px 12px; }
-th { background-color: rgba(0,0,0,0.1); color: ${h1Style.color}; }`;
+const generateCalibreCSS = (settings: StyleSettings, templateId: string): string => {
+  const template = getTemplateById(templateId);
+  if (template) {
+    return template.generateCSS(settings);
+  }
+  return cssTemplates[0].generateCSS(settings);
 };
 
 export default TextPreview;

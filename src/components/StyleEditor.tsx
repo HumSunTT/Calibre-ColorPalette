@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RGB } from '../types/color';
 import { rgbToHex, hexToRgb } from '../utils/colorConversion';
+import { getContrastInfo, ContrastInfo } from '../utils/contrast';
 
 export interface StyleSettings {
   bg: string;
@@ -149,12 +150,59 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ settings, onChange }) => {
         <ColorInput label={t('styleEditor.blockquote')} value={settings.blockquote} onChange={(v) => updateColor('blockquote', v)} />
       </div>
 
+      <ContrastIndicator bg={settings.bg} fg={settings.text} />
+
       <div className="space-y-3">
         <div className="text-xs font-medium text-gray-300 border-b border-gray-700 pb-1">{t('styleEditor.titleStyles')}</div>
         <TextStyleEditor label={t('styleEditor.h1Chapter')} styleKey="h1" />
         <TextStyleEditor label={t('styleEditor.h2Section')} styleKey="h2" />
         <TextStyleEditor label={t('styleEditor.h3Subsection')} styleKey="h3" />
         <TextStyleEditor label={t('styleEditor.firstSentence')} styleKey="firstSentence" />
+      </div>
+    </div>
+  );
+};
+
+const ContrastIndicator: React.FC<{ bg: string; fg: string }> = ({ bg, fg }) => {
+  const { t } = useTranslation();
+  const [contrastInfo, setContrastInfo] = useState<ContrastInfo | null>(null);
+
+  useEffect(() => {
+    try {
+      const info = getContrastInfo(fg, bg);
+      setContrastInfo(info);
+    } catch {
+      setContrastInfo(null);
+    }
+  }, [bg, fg]);
+
+  if (!contrastInfo) return null;
+
+  const levelColors = {
+    'AAA': 'bg-green-500',
+    'AA': 'bg-yellow-500',
+    'Fail': 'bg-red-500',
+  };
+
+  return (
+    <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="text-xs font-medium text-white mb-2">{t('contrast.title')}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-400">{t('contrast.ratio')}:</span>
+          <span className="text-white font-mono text-sm">{contrastInfo.ratio.toFixed(2)}:1</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-400">{t('contrast.level')}:</span>
+          <span className={`px-2 py-0.5 rounded text-xs font-medium text-white ${levelColors[contrastInfo.level]}`}>
+            {contrastInfo.level}
+          </span>
+        </div>
+        {contrastInfo.isAccessible ? (
+          <span className="text-xs text-green-400">{t('contrast.pass')}</span>
+        ) : (
+          <span className="text-xs text-red-400">{t('contrast.fail')}</span>
+        )}
       </div>
     </div>
   );
