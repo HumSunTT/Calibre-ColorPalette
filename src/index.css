@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+  color: #e0e0e0;
+}
+
+.color-card {
+  @apply relative overflow-hidden rounded-xl shadow-lg transition-all duration-300 cursor-pointer;
+  min-height: 120px;
+}
+
+.color-card:hover {
+  @apply shadow-2xl transform -translate-y-1;
+}
+
+.slider-container {
+  @apply flex items-center gap-4 mb-4;
+}
+
+.slider-label {
+  @apply w-8 text-lg font-bold;
+}
+
+.slider-input {
+  @apply flex-1 h-3 rounded-full appearance-none cursor-pointer;
+}
+
+.slider-input::-webkit-slider-thumb {
+  @apply appearance-none w-5 h-5 rounded-full cursor-pointer shadow-md;
+}
+
+.copy-notification {
+  @apply absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs opacity-0 transition-opacity duration-300;
+}
+
+.copy-notification.show {
+  @apply opacity-100;
+}
+
+.tab-button {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-300;
+}
+
+.tab-button.active {
+  @apply bg-blue-600 text-white shadow-lg;
+}
+
+.tab-button:not(.active) {
+  @apply bg-gray-700 text-gray-300 hover:bg-gray-600;
+}
