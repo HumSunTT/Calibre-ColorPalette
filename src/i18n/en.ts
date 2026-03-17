@@ -1,6 +1,6 @@
 export default {
-  title: 'Color Palette',
-  subtitle: 'Generate professional color schemes, export Calibre CSS styles',
+  title: 'Calibre Color Palette',
+  subtitle: 'Generate professional color schemes, export Calibre reader styles',
   
   presets: {
     title: 'Color Presets',

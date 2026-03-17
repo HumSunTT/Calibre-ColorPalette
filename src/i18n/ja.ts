@@ -1,6 +1,6 @@
 export default {
-  title: 'カラーパレット',
-  subtitle: 'プロフェッショナルな配色スキームを生成、Calibre CSSスタイルをエクスポート',
+  title: 'Calibre カラーパレット',
+  subtitle: 'プロフェッショナルな配色を生成、Calibreリーダースタイルをエクスポート',
   
   presets: {
     title: 'プリセット色系',

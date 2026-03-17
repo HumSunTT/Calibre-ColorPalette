@@ -1,6 +1,6 @@
 export default {
-  title: '调色盘',
-  subtitle: '输入颜色，生成专业配色方案，一键导出 Calibre 样式',
+  title: 'Calibre 调色盘',
+  subtitle: '生成专业配色方案，一键导出 Calibre 阅读器样式',
   
   presets: {
     title: '预设色系',

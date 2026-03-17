@@ -1,4 +1,4 @@
-# 🎨 调色盘 - 专业配色方案工具
+# 🎨 Calibre 调色盘
 
 [English](#english) | [日本語](#日本語) | [中文](#中文)
 
@@ -7,7 +7,7 @@
 <a name="中文"></a>
 ## 中文
 
-一个现代化的颜色搭配工具，输入任意颜色，自动生成 10 种专业配色方案，支持样式编辑器自定义各元素颜色和特效，一键导出 Calibre 阅读器 CSS 样式，专为电子书阅读体验优化。
+专为 Calibre 阅读器设计的配色工具，一键生成专业配色方案，支持 17 种预设色系和 10 种配色算法，实时预览电子书效果并导出 CSS 样式。
 
 ![主界面](main.png)
 
@@ -113,7 +113,7 @@ npm run build
 <a name="english"></a>
 ## English
 
-A modern color palette tool that generates 10 professional color schemes from any input color. Features a style editor for customizing element colors and effects, with one-click CSS export for Calibre e-reader, optimized for e-book reading experience.
+A color tool designed for Calibre e-reader. Generate professional color schemes with one click, featuring 17 preset palettes and 10 color algorithms. Preview e-book effects in real-time and export CSS styles.
 
 ![Main Interface](main.png)
 
@@ -219,7 +219,7 @@ Visit http://localhost:5173
 <a name="日本語"></a>
 ## 日本語
 
-任意の色を入力して10種類のプロフェッショナルな配色スキームを自動生成するモダンなカラーパレットツール。スタイルエディタで各要素の色とエフェクトをカスタマイズでき、Calibre電子書籍リーダー向けのCSSをワンクリックでエクスポート、電子書籍の読書体験に最適化されています。
+Calibre電子書籍リーダー専用の配色ツール。17種類のプリセットと10種類の配色アルゴリズムでプロフェッショナルな配色をワンクリックで生成。電子書籍の効果をリアルタイムでプレビューし、CSSスタイルをエクスポート。
 
 ![メイン画面](main.png)
 
