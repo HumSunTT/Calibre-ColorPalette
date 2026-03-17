@@ -11,6 +11,9 @@ export default {
     hexLabel: 'HEX 颜色值',
     hexError: '请输入有效的HEX值',
     random: '随机',
+    pickColor: '屏幕取色',
+    pickColorNotSupported: '您的浏览器不支持屏幕取色功能，请使用 Chrome/Edge 浏览器',
+    pickColorHint: '点击 🎯 按钮可从屏幕任意位置取色',
   },
   
   colorPreview: {

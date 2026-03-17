@@ -11,6 +11,9 @@ export default {
     hexLabel: 'HEX Color',
     hexError: 'Please enter a valid HEX value',
     random: 'Random',
+    pickColor: 'Pick from Screen',
+    pickColorNotSupported: 'Your browser does not support color picker. Please use Chrome/Edge.',
+    pickColorHint: 'Click 🎯 to pick color from anywhere on screen',
   },
   
   colorPreview: {

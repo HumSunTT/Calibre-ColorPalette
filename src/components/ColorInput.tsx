@@ -9,17 +9,31 @@ interface ColorInputProps {
   onRandom: () => void;
 }
 
+declare global {
+  interface Window {
+    EyeDropper?: new () => {
+      open: () => Promise<{ sRGBHex: string }>;
+    };
+  }
+}
+
 const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
   const { t } = useTranslation();
   const [hexInput, setHexInput] = useState(rgbToHex(rgb));
   const [hexError, setHexError] = useState(false);
   const [localRgb, setLocalRgb] = useState(rgb);
+  const [isPicking, setIsPicking] = useState(false);
+  const [eyeDropperSupported, setEyeDropperSupported] = useState(false);
 
   useEffect(() => {
     setHexInput(rgbToHex(rgb));
     setHexError(false);
     setLocalRgb(rgb);
   }, [rgb]);
+
+  useEffect(() => {
+    setEyeDropperSupported('EyeDropper' in window);
+  }, []);
 
   const handleSliderChange = (channel: 'r' | 'g' | 'b', value: number) => {
     const newRgb = { ...rgb, [channel]: value };
@@ -58,6 +72,23 @@ const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
     }
   };
 
+  const handlePickColor = async () => {
+    if (!window.EyeDropper) {
+      alert(t('colorInput.pickColorNotSupported'));
+      return;
+    }
+
+    try {
+      setIsPicking(true);
+      const eyeDropper = new window.EyeDropper();
+      const result = await eyeDropper.open();
+      handleHexChange(result.sRGBHex);
+    } catch {
+    } finally {
+      setIsPicking(false);
+    }
+  };
+
   const sliders = [
     { channel: 'r' as const, label: 'R', value: rgb.r },
     { channel: 'g' as const, label: 'G', value: rgb.g },
@@ -72,12 +103,28 @@ const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-5 shadow-xl">
       <div className="flex justify-between items-center mb-5">
         <h2 className="text-xl font-bold text-white">{t('colorInput.title')}</h2>
-        <button
-          onClick={onRandom}
-          className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg text-sm"
-        >
-          🎲 {t('colorInput.random')}
-        </button>
+        <div className="flex gap-2">
+          {eyeDropperSupported && (
+            <button
+              onClick={handlePickColor}
+              disabled={isPicking}
+              className={`px-3 py-1.5 rounded-lg font-medium shadow-lg text-sm transition-all ${
+                isPicking 
+                  ? 'bg-green-600 text-white cursor-wait' 
+                  : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:opacity-90'
+              }`}
+              title={t('colorInput.pickColor')}
+            >
+              {isPicking ? '🎯...' : '🎯'}
+            </button>
+          )}
+          <button
+            onClick={onRandom}
+            className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg text-sm"
+          >
+            🎲 {t('colorInput.random')}
+          </button>
+        </div>
       </div>
       
       <div className="mb-4">
@@ -102,6 +149,11 @@ const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
         </div>
         {hexError && (
           <p className="text-red-400 text-xs mt-1">{t('colorInput.hexError')}</p>
+        )}
+        {eyeDropperSupported && (
+          <p className="text-gray-500 text-xs mt-1.5">
+            💡 {t('colorInput.pickColorHint')}
+          </p>
         )}
       </div>
       

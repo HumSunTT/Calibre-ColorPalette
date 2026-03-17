@@ -11,6 +11,9 @@ export default {
     hexLabel: 'HEX色値',
     hexError: '有効なHEX値を入力してください',
     random: 'ランダム',
+    pickColor: '画面から採色',
+    pickColorNotSupported: 'お使いのブラウザは画面採色に対応していません。Chrome/Edgeをご利用ください',
+    pickColorHint: '🎯ボタンで画面の任意の場所から色を採取できます',
   },
   
   colorPreview: {
