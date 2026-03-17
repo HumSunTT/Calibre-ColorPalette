@@ -71,14 +71,14 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
   const renderParagraph = (text: string, index: number) => {
     if (text === t('sampleText.chapter')) {
       return (
-        <h1 key={index} style={getTextStyleCSS(styleSettings.h1)}>
+        <h1 key={index} className="text-3xl mb-4 mt-6" style={getTextStyleCSS(styleSettings.h1)}>
           {text}
         </h1>
       );
     }
     if (text === t('sampleText.section1') || text === t('sampleText.section2')) {
       return (
-        <h2 key={index} style={getTextStyleCSS(styleSettings.h2)}>
+        <h2 key={index} className="text-xl mb-3 mt-5" style={getTextStyleCSS(styleSettings.h2)}>
           {text}
         </h2>
       );
@@ -102,7 +102,8 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
     return (
       <p 
         key={index} 
-        style={{ color: textColor }}
+        className="mb-4 text-justify"
+        style={{ color: textColor, textIndent: '2em' }}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -148,10 +149,10 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <div
-          className="rounded-xl p-6 shadow-xl transition-all duration-300 min-h-[500px]"
+          className="rounded-xl p-8 shadow-xl transition-all duration-300 min-h-[500px]"
           style={{ backgroundColor: styleSettings.bg }}
         >
-          <div className="prose max-w-none font-serif">
+          <div className="max-w-none font-serif text-lg leading-relaxed">
             {sampleParagraphs.map((p, i) => renderParagraph(p, i))}
           </div>
         </div>
