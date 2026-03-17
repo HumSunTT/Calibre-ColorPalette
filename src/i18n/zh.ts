@@ -104,8 +104,16 @@ export default {
     collapse: '收起',
     baseColor: '基础色',
     delete: '🗑️ 删除',
+    rename: '✏️ 重命名',
     savedAt: '保存时间',
     empty: '暂无保存的配色方案',
+    exportJSON: '📤 导出',
+    importJSON: '📥 导入',
+    favorite: '⭐ 收藏',
+    unfavorite: '取消收藏',
+    tags: '标签',
+    addTag: '添加标签',
+    noTags: '暂无标签',
   },
   
   footer: {
@@ -178,29 +186,7 @@ export default {
     },
     classic: {
       name: '古典风格',
-      description: '优雅传统,纸质感',
+      description: '优雅传统，纸质感',
     },
-  },
-  
-  savedPalettes: {
-    title: '💝 已保存的配色',
-    expand: '展开',
-    collapse: '收起',
-    baseColor: '基础色',
-    delete: '🗑️ 删除',
-    rename: '✏️ 重命名',
-    savedAt: '保存时间',
-    empty: '暂无保存的配色方案',
-    exportJSON: '📤 导出',
-    importJSON: '📥 导入',
-    favorite: '⭐ 收藏',
-    unfavorite: '取消收藏',
-    tags: '标签',
-    addTag: '添加标签',
-    noTags: '暂无标签',
-  },
-  
-  footer: {
-    tip: '💡 点击颜色卡片复制色值，点击"导出 CSS"获取阅读器样式',
   },
 };

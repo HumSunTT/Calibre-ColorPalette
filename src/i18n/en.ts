@@ -104,53 +104,89 @@ export default {
     collapse: 'Collapse',
     baseColor: 'Base',
     delete: '🗑️ Delete',
+    rename: '✏️ Rename',
     savedAt: 'Saved at',
     empty: 'No saved palettes yet',
+    exportJSON: '📤 Export',
+    importJSON: '📥 Import',
+    favorite: '⭐ Favorite',
+    unfavorite: 'Unfavorite',
+    tags: 'Tags',
+    addTag: 'Add Tag',
+    noTags: 'No tags',
   },
   
   footer: {
     tip: '💡 Click color card to copy, click "Export CSS" for reader styles',
   },
   
-  schemes: {
-    title: 'Color Schemes',
+  notification: {
+    saved: '✅ Palette saved!',
+    importFailed: '❌ Import failed',
+    exportFailed: '❌ Export failed',
   },
   
-  schemes: {
-    title: 'Color Schemes',
-    save: '💾 Save',
-    triadic: 'Triadic',
-    square: 'Square',
-    'split-complementary': 'Split-Comp',
-    monochromatic: 'Monochrome',
-    'double-complementary': 'Double-Comp'
-    compound: 'Compound',
-    shades: 'Shades'
-    neutral: 'Neutral'
-    'five-tone': 'Five-Tone'
-    'six-tone': 'Six-Tone'
+  contrast: {
+    title: 'Contrast Check',
+    ratio: 'Ratio',
+    level: 'Level',
+    pass: 'Pass',
+    fail: 'Fail',
+    aaa: 'AAA (≥7)',
+    aa: 'AA (≥4.5)',
+    check: 'Check Contrast',
+    noContrast: 'Insufficient contrast',
   },
   
-  schemeDescriptions: {
-    triadic: 'Three equidistant colors, balanced',
-    square: 'Four equidistant colors, varied',
-    'split-complementary': 'Base + adjacent to complement',
-    monochromatic: 'Same hue, different lightness',
-    'double-complementary': 'Two complementary pairs'
-    compound: 'Analogous + complementary'
-    shades: 'Same hue, different saturation'
-    neutral: 'Gray tones added, soft and muted
-    'five-tone': 'Five equidistant colors'
-    'six-tone': 'Six equidistant colors',
+  theme: {
+    title: 'Theme',
+    darkMode: 'Dark Mode',
+    lightMode: 'Light Mode',
+    toggleTheme: 'Toggle Theme',
   },
   
-  sampleText: {
-    chapter: '第一章 出会',
-    section1: '第一节 相逢',
-    paragraph1: 'It was a late autumn evening. The setting sun cast its golden light on the ancient stone road. Lin Xiao stood before the café window, watching the hurried passersby, a strange anticipation rising in her heart.',
-    dialog: '"Your latte, enjoy," the server said softly, interrupting her wandering thoughts.',
-    paragraph2: 'Lin Xiao smiled as she took the coffee, her gaze inadvertently fell on a quiet figure in the corner. That person was intently reading a yellowed old book, as if the surrounding noise had nothing to do with them.'
-    section2: '第二节 心动',
-    paragraph3: 'At that moment, fate quietly turned its wheel. She never imagined that a chance encounter would change her life's trajectory. Outside, the autumn breeze gently blew, sweeping up a few golden leaves that the air and spiraling into the distance.',
-  }
+  history: {
+    undo: 'Undo',
+    redo: 'Redo',
+    noUndo: 'Nothing to undo',
+    noRedo: 'Nothing to redo',
+  },
+  
+  tags: {
+    addTag: 'Add Tag',
+    removeTag: 'Remove Tag',
+    filterByTag: 'Filter by Tag',
+    noTags: 'No tags',
+  },
+  
+  imageExtractor: {
+    title: 'Extract Colors from Image',
+    upload: 'Upload Image',
+    dropImage: 'Drop image here',
+    extracting: 'Extracting colors...',
+    extractSuccess: 'Colors extracted!',
+    extractFailed: 'Extraction failed',
+    supportedFormats: 'Supported: JPG, PNG, GIF, WebP',
+    clickOrDrop: 'Click or drag image',
+  },
+  
+  templates: {
+    title: 'CSS Templates',
+    novel: {
+      name: 'Novel',
+      description: 'Warm and comfortable for long reading',
+    },
+    technical: {
+      name: 'Technical',
+      description: 'Clean, structured, code-friendly',
+    },
+    magazine: {
+      name: 'Magazine',
+      description: 'Modern, dynamic, colorful',
+    },
+    classic: {
+      name: 'Classic',
+      description: 'Elegant, traditional, paper-like',
+    },
+  },
 };

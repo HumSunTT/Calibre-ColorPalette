@@ -104,8 +104,16 @@ export default {
     collapse: '閉じる',
     baseColor: 'ベース色',
     delete: '🗑️ 削除',
+    rename: '✏️ 名前変更',
     savedAt: '保存日時',
     empty: '保存したパレットはありません',
+    exportJSON: '📤 エクスポート',
+    importJSON: '📥 インポート',
+    favorite: '⭐ お気に入り',
+    unfavorite: 'お気に入り解除',
+    tags: 'タグ',
+    addTag: 'タグ追加',
+    noTags: 'タグなし',
   },
   
   footer: {
@@ -114,5 +122,71 @@ export default {
   
   notification: {
     saved: '✅ パレットを保存しました!',
+    importFailed: '❌ インポート失敗',
+    exportFailed: '❌ エクスポート失敗',
+  },
+  
+  contrast: {
+    title: 'コントラストチェック',
+    ratio: '比率',
+    level: 'レベル',
+    pass: '合格',
+    fail: '不合格',
+    aaa: 'AAA (≥7)',
+    aa: 'AA (≥4.5)',
+    check: 'コントラスト確認',
+    noContrast: 'コントラスト不足',
+  },
+  
+  theme: {
+    title: 'テーマ',
+    darkMode: 'ダークモード',
+    lightMode: 'ライトモード',
+    toggleTheme: 'テーマ切替',
+  },
+  
+  history: {
+    undo: '元に戻す',
+    redo: 'やり直し',
+    noUndo: '元に戻せません',
+    noRedo: 'やり直せません',
+  },
+  
+  tags: {
+    addTag: 'タグ追加',
+    removeTag: 'タグ削除',
+    filterByTag: 'タグで絞り込み',
+    noTags: 'タグなし',
+  },
+  
+  imageExtractor: {
+    title: '画像から色を抽出',
+    upload: '画像をアップロード',
+    dropImage: '画像をドロップ',
+    extracting: '色を抽出中...',
+    extractSuccess: '抽出完了!',
+    extractFailed: '抽出失敗',
+    supportedFormats: '対応形式: JPG, PNG, GIF, WebP',
+    clickOrDrop: 'クリックまたはドラッグ',
+  },
+  
+  templates: {
+    title: 'CSSテンプレート',
+    novel: {
+      name: '小説',
+      description: '長時間読書に快適で温かみのあるスタイル',
+    },
+    technical: {
+      name: '技術書',
+      description: 'コードフレンドリー、クリーンな構造',
+    },
+    magazine: {
+      name: '雑誌',
+      description: 'モダンでカラフル、ダイナミック',
+    },
+    classic: {
+      name: 'クラシック',
+      description: 'エレガントで伝統的、紙のような質感',
+    },
   },
 };
