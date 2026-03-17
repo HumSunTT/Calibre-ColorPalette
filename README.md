@@ -82,6 +82,36 @@ npm run build
 
 访问 http://localhost:5173 查看应用
 
+### 🖥️ 桌面应用
+
+支持打包为 Windows/macOS/Linux 桌面应用：
+
+```bash
+# 开发模式
+npm run electron:dev
+
+# 打包 Windows 版本
+npm run electron:build:win
+
+# 打包 macOS 版本
+npm run electron:build:mac
+
+# 打包 Linux 版本
+npm run electron:build:linux
+```
+
+### 📦 发布新版本
+
+1. 更新 `package.json` 中的版本号
+2. 提交代码并创建 tag：
+   ```bash
+   git add .
+   git commit -m "Release v1.0.0"
+   git tag v1.0.0
+   git push origin main --tags
+   ```
+3. GitHub Actions 自动构建并发布到 Releases
+
 ### 📦 Calibre 使用方法
 
 1. 在本工具中选择喜欢的颜色和配色方案

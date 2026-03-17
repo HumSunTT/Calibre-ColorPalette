@@ -1,0 +1,100 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build app
+        run: npm run build
+        
+      - name: Build Electron app (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npm run electron:build:win
+        
+      - name: Build Electron app (macOS)
+        if: matrix.os == 'macos-latest'
+        run: npm run electron:build:mac
+        
+      - name: Build Electron app (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run electron:build:linux
+        
+      - name: Upload artifacts (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: release/*.exe
+          
+      - name: Upload artifacts (macOS)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: release/*.dmg
+          
+      - name: Upload artifacts (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: release/*.AppImage
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: windows
+          
+      - name: Download macOS build
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: macos
+          
+      - name: Download Linux build
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-build
+          path: linux
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            windows/*.exe
+            macos/*.dmg
+            linux/*.AppImage
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
