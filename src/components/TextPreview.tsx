@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { RGB, HarmonyScheme, HARMONY_NAMES } from '../types/color';
+import { useTranslation } from 'react-i18next';
+import { RGB, HarmonyScheme } from '../types/color';
 import { generateHarmony } from '../utils/harmonySchemes';
 import { copyToClipboard } from '../utils/storage';
 import StyleEditor, { StyleSettings, createDefaultStyleSettings, TextStyle } from './StyleEditor';
@@ -7,20 +8,6 @@ import StyleEditor, { StyleSettings, createDefaultStyleSettings, TextStyle } fro
 interface TextPreviewProps {
   baseColor: RGB;
 }
-
-const SAMPLE_TEXT = `第一章 初遇
-
-第一节 相逢
-
-那是一个深秋的傍晚，夕阳的余晖洒落在古老的石板路上。林晓站在咖啡馆的玻璃窗前，望着窗外匆匆走过的行人，心中泛起一丝莫名的期待。
-
-"您的拿铁，请慢用。"服务员轻声说道，打断了她纷飞的思绪。
-
-林晓微笑着接过咖啡，目光却不经意间扫过角落里那个安静的身影。那个人正专注地翻阅着一本泛黄的旧书，仿佛周围的喧嚣与他毫无关系。
-
-第二节 心动
-
-就在这一刻，命运悄然转动。她从未想过，一个偶然的邂逅，竟会改变她此后的人生轨迹。窗外秋风轻拂，卷起几片金黄的落叶，在空中打着旋儿飘向远方。`;
 
 const schemes: HarmonyScheme[] = [
   'triadic',
@@ -35,179 +22,9 @@ const schemes: HarmonyScheme[] = [
   'six-tone',
 ];
 
-const generateCalibreCSS = (settings: StyleSettings): string => {
-  const h1Style = settings.h1;
-  const h2Style = settings.h2;
-  const h3Style = settings.h3;
-  const firstStyle = settings.firstSentence;
-
-  const h1Decor = h1Style.underline ? 'underline' : 'none';
-  const h2Decor = h2Style.underline ? 'underline' : 'none';
-  const h3Decor = h3Style.underline ? 'underline' : 'none';
-  const firstDecor = firstStyle.underline ? 'underline' : 'none';
-
-  return `/* Calibre 阅读器样式 */
-/* 使用方法：Calibre -> 首选项 -> 外观 -> 样式 -> 粘贴此CSS */
-
-:root {
-  --bg-primary: ${settings.bg};
-  --text-primary: ${settings.text};
-  --text-secondary: ${settings.textSecondary};
-  --h1-color: ${h1Style.color};
-  --h2-color: ${h2Style.color};
-  --h3-color: ${h3Style.color};
-  --first-sentence: ${firstStyle.color};
-  --link-color: ${settings.link};
-  --blockquote-color: ${settings.blockquote};
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Noto Serif CJK SC", "Source Han Serif CN", "宋体", serif;
-  font-size: 1rem;
-  line-height: 1.75;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 2.5em 1.5em;
-  text-align: justify;
-}
-
-/* H1 章节标题 */
-h1, .chaptertitle-c-2 {
-  color: ${h1Style.color};
-  font-size: ${h1Style.fontSize / 100}em;
-  font-weight: ${h1Style.bold ? 700 : 400};
-  font-style: ${h1Style.italic ? 'italic' : 'normal'};
-  text-decoration: ${h1Decor};
-  text-align: center;
-  margin: 1.5em 0 1em;
-  padding: 0.5em;
-  background: linear-gradient(90deg, ${h1Style.color}20 0%, transparent 50%, ${h1Style.color}20 100%);
-  border-top: 2px solid ${h1Style.color};
-  border-bottom: 2px solid ${h1Style.color};
-}
-
-/* H2 节标题 */
-h2, .sectitle-c-2 {
-  color: ${h2Style.color};
-  font-size: ${h2Style.fontSize / 100}em;
-  font-weight: ${h2Style.bold ? 700 : 400};
-  font-style: ${h2Style.italic ? 'italic' : 'normal'};
-  text-decoration: ${h2Decor};
-  margin: 1.2em 0 0.8em;
-  padding: 0.5em 0.8em;
-  border-left: 4px solid ${h2Style.color};
-  background: linear-gradient(90deg, ${h2Style.color}15 0%, transparent 100%);
-}
-
-/* H3 小节标题 */
-h3 {
-  color: ${h3Style.color};
-  font-size: ${h3Style.fontSize / 100}em;
-  font-weight: ${h3Style.bold ? 700 : 400};
-  font-style: ${h3Style.italic ? 'italic' : 'normal'};
-  text-decoration: ${h3Decor};
-  margin: 1em 0 0.6em;
-}
-
-/* 正文段落 */
-p, .bodyContent-1 {
-  color: var(--text-primary);
-  text-indent: 2em;
-  line-height: 1.75;
-  margin-bottom: 1.5em;
-  text-align: justify;
-}
-
-/* 段落交替颜色 */
-p:nth-child(odd), .bodyContent-1:nth-child(odd) {
-  color: var(--text-primary);
-}
-
-p:nth-child(even), .bodyContent-1:nth-child(even) {
-  color: var(--text-secondary);
-}
-
-/* 段落首句强调 */
-p b:first-child,
-p strong:first-child,
-.bodyContent-1 b:first-child,
-.bodyContent-1 strong:first-child {
-  color: ${firstStyle.color};
-  font-size: ${firstStyle.fontSize / 100}em;
-  font-weight: ${firstStyle.bold ? 700 : 400};
-  font-style: ${firstStyle.italic ? 'italic' : 'normal'};
-  text-decoration: ${firstDecor};
-  display: inline-block;
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-  border-left: 3px solid ${firstStyle.color};
-  margin-right: 0.3em;
-}
-
-/* 加粗 */
-b, strong {
-  color: ${h1Style.color};
-  font-weight: 700;
-}
-
-/* 链接 */
-a {
-  color: ${settings.link};
-  text-decoration: none;
-  border-bottom: 1px dashed ${settings.link};
-}
-
-/* 引用 */
-blockquote {
-  border-left: 3px solid ${settings.blockquote};
-  margin: 1em 0;
-  padding: 0.5em 1em;
-  background-color: rgba(0,0,0,0.05);
-  color: var(--text-secondary);
-}
-
-/* 代码 */
-code, pre {
-  background-color: rgba(0,0,0,0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: monospace;
-}
-
-/* 分隔线 */
-hr {
-  border: none;
-  border-top: 1px solid ${h1Style.color}40;
-  margin: 2em 0;
-}
-
-/* 表格 */
-table {
-  border-collapse: collapse;
-  margin: 1em auto;
-}
-
-th, td {
-  border: 1px solid ${h1Style.color}40;
-  padding: 8px 12px;
-}
-
-th {
-  background-color: rgba(0,0,0,0.1);
-  color: ${h1Style.color};
-}`;
-};
-
 const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
-  const [selectedScheme, setSelectedScheme] = useState<HarmonyScheme>('complementary');
+  const { t } = useTranslation();
+  const [selectedScheme, setSelectedScheme] = useState<HarmonyScheme>('triadic');
   const [copied, setCopied] = useState<string | null>(null);
   const [showCSSModal, setShowCSSModal] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
@@ -229,11 +46,19 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
       setCopied(type);
       setTimeout(() => setCopied(null), 1500);
     } else {
-      alert('复制失败，请手动复制');
+      alert(t('textPreview.copyFailed'));
     }
   };
 
-  const paragraphs = SAMPLE_TEXT.split('\n\n').filter(p => p.trim());
+  const sampleParagraphs = [
+    t('sampleText.chapter'),
+    t('sampleText.section1'),
+    t('sampleText.paragraph1'),
+    t('sampleText.dialog'),
+    t('sampleText.paragraph2'),
+    t('sampleText.section2'),
+    t('sampleText.paragraph3'),
+  ];
 
   const getTextStyleCSS = (style: TextStyle): React.CSSProperties => ({
     color: style.color,
@@ -244,14 +69,14 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
   });
 
   const renderParagraph = (text: string, index: number) => {
-    if (text.startsWith('第') && text.includes('章')) {
+    if (text === t('sampleText.chapter')) {
       return (
         <h1 key={index} style={getTextStyleCSS(styleSettings.h1)}>
           {text}
         </h1>
       );
     }
-    if (text.startsWith('第') && text.includes('节')) {
+    if (text === t('sampleText.section1') || text === t('sampleText.section2')) {
       return (
         <h2 key={index} style={getTextStyleCSS(styleSettings.h2)}>
           {text}
@@ -266,8 +91,8 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
     const hasFirstSentence = text.length > 20 && !text.startsWith('"');
     
     if (hasFirstSentence) {
-      const firstSentenceEnd = text.search(/[。！？，、]/);
-      if (firstSentenceEnd > 0 && firstSentenceEnd < 30) {
+      const firstSentenceEnd = text.search(/[。！？，、.!?]/);
+      if (firstSentenceEnd > 0 && firstSentenceEnd < 50) {
         const firstSentence = text.slice(0, firstSentenceEnd + 1);
         const rest = text.slice(firstSentenceEnd + 1);
         content = `<b style="color:${styleSettings.firstSentence.color};font-weight:${styleSettings.firstSentence.bold ? 700 : 400}">${firstSentence}</b>${rest}`;
@@ -286,7 +111,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white">📖 电子书预览</h2>
+        <h2 className="text-xl font-bold text-white">{t('textPreview.title')}</h2>
         <div className="flex gap-2">
           <button
             onClick={() => setShowEditor(!showEditor)}
@@ -294,13 +119,13 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
               showEditor ? 'bg-yellow-600 text-white' : 'bg-gray-600 text-gray-200 hover:bg-gray-500'
             }`}
           >
-            🎨 编辑样式
+            {t('textPreview.editStyle')}
           </button>
           <button
             onClick={() => setShowCSSModal(true)}
             className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-sm font-medium transition-colors"
           >
-            📦 导出 CSS
+            {t('textPreview.exportCSS')}
           </button>
         </div>
       </div>
@@ -316,7 +141,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
           >
-            {HARMONY_NAMES[scheme]}
+            {t(`schemes.${scheme}`)}
           </button>
         ))}
       </div>
@@ -327,7 +152,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
           style={{ backgroundColor: styleSettings.bg }}
         >
           <div className="prose max-w-none font-serif">
-            {paragraphs.map((p, i) => renderParagraph(p, i))}
+            {sampleParagraphs.map((p, i) => renderParagraph(p, i))}
           </div>
         </div>
 
@@ -345,7 +170,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
           style={{ backgroundColor: styleSettings.bg, color: styleSettings.text }}
           onClick={() => handleCopy(styleSettings.bg, 'bg')}
         >
-          <div className="text-xs opacity-70">背景</div>
+          <div className="text-xs opacity-70">{t('textPreview.bg')}</div>
           <div className="font-mono text-xs">{styleSettings.bg}</div>
         </div>
         <div 
@@ -353,7 +178,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
           style={{ backgroundColor: styleSettings.text, color: styleSettings.bg }}
           onClick={() => handleCopy(styleSettings.text, 'text')}
         >
-          <div className="text-xs opacity-70">文字</div>
+          <div className="text-xs opacity-70">{t('textPreview.text')}</div>
           <div className="font-mono text-xs">{styleSettings.text}</div>
         </div>
         <div 
@@ -378,7 +203,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" onClick={() => setShowCSSModal(false)}>
           <div className="bg-gray-800 rounded-xl p-6 max-w-3xl w-full max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-white">📦 Calibre CSS 样式</h3>
+              <h3 className="text-xl font-bold text-white">{t('cssModal.title')}</h3>
               <button 
                 onClick={() => setShowCSSModal(false)}
                 className="text-gray-400 hover:text-white text-2xl"
@@ -396,7 +221,7 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
                 onClick={() => handleCopy(calibreCSS, 'calibre')}
                 className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors"
               >
-                {copied === 'calibre' ? '✓ 已复制到剪贴板' : '📋 一键复制 CSS'}
+                {copied === 'calibre' ? t('cssModal.copied') : t('cssModal.copy')}
               </button>
               <button
                 onClick={() => {
@@ -411,25 +236,160 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
                 }}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors"
               >
-                全选
+                {t('cssModal.selectAll')}
               </button>
             </div>
             
             <div className="mt-4 text-sm text-gray-400 space-y-2">
-              <p className="font-medium text-white">使用方法：</p>
+              <p className="font-medium text-white">{t('cssModal.usage')}</p>
               <ol className="list-decimal list-inside space-y-1">
-                <li>打开 Calibre 阅读器</li>
-                <li>首选项 → 外观 → 样式</li>
-                <li>粘贴 CSS 到样式框</li>
-                <li>点击应用</li>
+                <li>{t('cssModal.step1')}</li>
+                <li>{t('cssModal.step2')}</li>
+                <li>{t('cssModal.step3')}</li>
+                <li>{t('cssModal.step4')}</li>
               </ol>
-              <p className="text-xs text-gray-500 mt-2">提示：CSS 代码可直接选中复制</p>
+              <p className="text-xs text-gray-500 mt-2">{t('cssModal.tip')}</p>
             </div>
           </div>
         </div>
       )}
     </div>
   );
+};
+
+const generateCalibreCSS = (settings: StyleSettings): string => {
+  const h1Style = settings.h1;
+  const h2Style = settings.h2;
+  const h3Style = settings.h3;
+  const firstStyle = settings.firstSentence;
+
+  const h1Decor = h1Style.underline ? 'underline' : 'none';
+  const h2Decor = h2Style.underline ? 'underline' : 'none';
+  const h3Decor = h3Style.underline ? 'underline' : 'none';
+  const firstDecor = firstStyle.underline ? 'underline' : 'none';
+
+  return `/* Calibre CSS Styles */
+:root {
+  --bg-primary: ${settings.bg};
+  --text-primary: ${settings.text};
+  --text-secondary: ${settings.textSecondary};
+  --h1-color: ${h1Style.color};
+  --h2-color: ${h2Style.color};
+  --h3-color: ${h3Style.color};
+  --first-sentence: ${firstStyle.color};
+  --link-color: ${settings.link};
+  --blockquote-color: ${settings.blockquote};
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Serif CJK SC", "Source Han Serif CN", serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5em 1.5em;
+  text-align: justify;
+}
+
+h1 {
+  color: ${h1Style.color};
+  font-size: ${h1Style.fontSize / 100}em;
+  font-weight: ${h1Style.bold ? 700 : 400};
+  font-style: ${h1Style.italic ? 'italic' : 'normal'};
+  text-decoration: ${h1Decor};
+  text-align: center;
+  margin: 1.5em 0 1em;
+  padding: 0.5em;
+  background: linear-gradient(90deg, ${h1Style.color}20 0%, transparent 50%, ${h1Style.color}20 100%);
+  border-top: 2px solid ${h1Style.color};
+  border-bottom: 2px solid ${h1Style.color};
+}
+
+h2 {
+  color: ${h2Style.color};
+  font-size: ${h2Style.fontSize / 100}em;
+  font-weight: ${h2Style.bold ? 700 : 400};
+  font-style: ${h2Style.italic ? 'italic' : 'normal'};
+  text-decoration: ${h2Decor};
+  margin: 1.2em 0 0.8em;
+  padding: 0.5em 0.8em;
+  border-left: 4px solid ${h2Style.color};
+  background: linear-gradient(90deg, ${h2Style.color}15 0%, transparent 100%);
+}
+
+h3 {
+  color: ${h3Style.color};
+  font-size: ${h3Style.fontSize / 100}em;
+  font-weight: ${h3Style.bold ? 700 : 400};
+  font-style: ${h3Style.italic ? 'italic' : 'normal'};
+  text-decoration: ${h3Decor};
+  margin: 1em 0 0.6em;
+}
+
+p {
+  color: var(--text-primary);
+  text-indent: 2em;
+  line-height: 1.75;
+  margin-bottom: 1.5em;
+  text-align: justify;
+}
+
+p:nth-child(odd) { color: var(--text-primary); }
+p:nth-child(even) { color: var(--text-secondary); }
+
+p b:first-child, p strong:first-child {
+  color: ${firstStyle.color};
+  font-size: ${firstStyle.fontSize / 100}em;
+  font-weight: ${firstStyle.bold ? 700 : 400};
+  font-style: ${firstStyle.italic ? 'italic' : 'normal'};
+  text-decoration: ${firstDecor};
+  display: inline-block;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border-left: 3px solid ${firstStyle.color};
+  margin-right: 0.3em;
+}
+
+b, strong { color: ${h1Style.color}; font-weight: 700; }
+
+a {
+  color: ${settings.link};
+  text-decoration: none;
+  border-bottom: 1px dashed ${settings.link};
+}
+
+blockquote {
+  border-left: 3px solid ${settings.blockquote};
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  background-color: rgba(0,0,0,0.05);
+  color: var(--text-secondary);
+}
+
+code, pre {
+  background-color: rgba(0,0,0,0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid ${h1Style.color}40;
+  margin: 2em 0;
+}
+
+table { border-collapse: collapse; margin: 1em auto; }
+th, td { border: 1px solid ${h1Style.color}40; padding: 8px 12px; }
+th { background-color: rgba(0,0,0,0.1); color: ${h1Style.color}; }`;
 };
 
 export default TextPreview;

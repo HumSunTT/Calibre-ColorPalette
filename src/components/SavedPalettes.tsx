@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SavedPalette, HARMONY_NAMES } from '../types/color';
+import { useTranslation } from 'react-i18next';
+import { SavedPalette } from '../types/color';
 import { getSavedPalettes, deletePalette } from '../utils/storage';
 import { rgbToHex } from '../utils/colorConversion';
 import ColorCard from './ColorCard';
 
 const SavedPalettes: React.FC = () => {
+  const { t } = useTranslation();
   const [palettes, setPalettes] = useState<SavedPalette[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -25,13 +27,13 @@ const SavedPalettes: React.FC = () => {
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-white">
-          💝 已保存的配色 ({palettes.length})
+          {t('savedPalettes.title')} ({palettes.length})
         </h2>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-gray-400 hover:text-white transition-colors"
         >
-          {isExpanded ? '收起' : '展开'}
+          {isExpanded ? t('savedPalettes.collapse') : t('savedPalettes.expand')}
         </button>
       </div>
       
@@ -45,17 +47,17 @@ const SavedPalettes: React.FC = () => {
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <span className="text-white font-medium">
-                    {HARMONY_NAMES[palette.scheme]}
+                    {t(`schemes.${palette.scheme}`)}
                   </span>
                   <span className="text-gray-400 text-sm ml-3">
-                    基础色: {rgbToHex(palette.baseColor)}
+                    {t('savedPalettes.baseColor')}: {rgbToHex(palette.baseColor)}
                   </span>
                 </div>
                 <button
                   onClick={() => handleDelete(palette.id)}
                   className="text-red-400 hover:text-red-300 transition-colors"
                 >
-                  🗑️ 删除
+                  {t('savedPalettes.delete')}
                 </button>
               </div>
               
@@ -66,7 +68,7 @@ const SavedPalettes: React.FC = () => {
               </div>
               
               <div className="mt-3 text-xs text-gray-500">
-                保存时间: {new Date(palette.createdAt).toLocaleString('zh-CN')}
+                {t('savedPalettes.savedAt')}: {new Date(palette.createdAt).toLocaleString()}
               </div>
             </div>
           ))}

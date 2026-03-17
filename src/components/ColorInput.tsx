@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RGB } from '../types/color';
 import { rgbToHex, hexToRgb } from '../utils/colorConversion';
 
@@ -9,6 +10,7 @@ interface ColorInputProps {
 }
 
 const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
+  const { t } = useTranslation();
   const [hexInput, setHexInput] = useState(rgbToHex(rgb));
   const [hexError, setHexError] = useState(false);
   const [localRgb, setLocalRgb] = useState(rgb);
@@ -69,17 +71,17 @@ const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-5 shadow-xl">
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-xl font-bold text-white">颜色输入</h2>
+        <h2 className="text-xl font-bold text-white">{t('colorInput.title')}</h2>
         <button
           onClick={onRandom}
           className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg text-sm"
         >
-          🎲 随机
+          🎲 {t('colorInput.random')}
         </button>
       </div>
       
       <div className="mb-4">
-        <label className="block text-xs text-gray-400 mb-1.5">HEX 颜色值</label>
+        <label className="block text-xs text-gray-400 mb-1.5">{t('colorInput.hexLabel')}</label>
         <div className="flex gap-2">
           <input
             type="text"
@@ -99,7 +101,7 @@ const ColorInput: React.FC<ColorInputProps> = ({ rgb, onChange, onRandom }) => {
           />
         </div>
         {hexError && (
-          <p className="text-red-400 text-xs mt-1">请输入有效的HEX值</p>
+          <p className="text-red-400 text-xs mt-1">{t('colorInput.hexError')}</p>
         )}
       </div>
       

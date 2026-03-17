@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RGB } from '../types/color';
 import { rgbToHex, getContrastColor } from '../utils/colorConversion';
 import { copyToClipboard, rgbToCssString } from '../utils/storage';
@@ -8,6 +9,7 @@ interface ColorCardProps {
 }
 
 const ColorCard: React.FC<ColorCardProps> = ({ rgb }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const hex = rgbToHex(rgb);
   const backgroundColor = rgbToCssString(rgb);
@@ -26,7 +28,7 @@ const ColorCard: React.FC<ColorCardProps> = ({ rgb }) => {
       className="relative rounded-lg cursor-pointer transition-all hover:scale-105 hover:shadow-lg overflow-hidden"
       style={{ backgroundColor }}
       onClick={handleClick}
-      title={`${hex} - 点击复制`}
+      title={`${hex} - Click to copy`}
     >
       <div 
         className="h-14 flex items-center justify-center"
@@ -44,7 +46,7 @@ const ColorCard: React.FC<ColorCardProps> = ({ rgb }) => {
           className="absolute inset-0 flex items-center justify-center bg-black/30"
           style={{ color: textColor }}
         >
-          <span className="text-xs font-medium">已复制!</span>
+          <span className="text-xs font-medium">{t('textPreview.copied')}</span>
         </div>
       )}
     </div>

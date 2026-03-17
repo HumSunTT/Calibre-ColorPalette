@@ -1,5 +1,6 @@
 import React from 'react';
-import { RGB, HarmonyScheme, HARMONY_NAMES } from '../types/color';
+import { useTranslation } from 'react-i18next';
+import { RGB, HarmonyScheme } from '../types/color';
 import { generateHarmony } from '../utils/harmonySchemes';
 import ColorCard from './ColorCard';
 
@@ -10,6 +11,7 @@ interface PaletteSchemeItemProps {
 }
 
 const PaletteSchemeItem: React.FC<PaletteSchemeItemProps> = ({ baseColor, scheme, onSave }) => {
+  const { t } = useTranslation();
   const { colors } = generateHarmony(baseColor, scheme);
 
   const handleSave = () => {
@@ -17,17 +19,17 @@ const PaletteSchemeItem: React.FC<PaletteSchemeItemProps> = ({ baseColor, scheme
   };
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-      <div className="flex justify-between items-center mb-3">
+    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-3 shadow-lg">
+      <div className="flex justify-between items-center mb-2">
         <div>
-          <h3 className="text-lg font-bold text-white">{HARMONY_NAMES[scheme]}</h3>
-          <p className="text-xs text-gray-400">{getSchemeDescription(scheme)}</p>
+          <h3 className="text-base font-bold text-white">{t(`schemes.${scheme}`)}</h3>
+          <p className="text-xs text-gray-400">{t(`schemeDescriptions.${scheme}`)}</p>
         </div>
         <button
           onClick={handleSave}
-          className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-sm font-medium hover:opacity-90 transition-opacity shadow"
+          className="px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded text-xs font-medium hover:opacity-90 transition-opacity shadow"
         >
-          💾 保存
+          {t('schemes.save')}
         </button>
       </div>
       
@@ -38,25 +40,6 @@ const PaletteSchemeItem: React.FC<PaletteSchemeItemProps> = ({ baseColor, scheme
       </div>
     </div>
   );
-};
-
-const getSchemeDescription = (scheme: HarmonyScheme): string => {
-  const descriptions: Record<HarmonyScheme, string> = {
-    'complementary': '色环相对两色，强烈对比',
-    'analogous': '色环相邻色，和谐统一',
-    'triadic': '色环等距三色，丰富平衡',
-    'square': '色环等距四色，变化丰富',
-    'split-complementary': '主色+互补两侧色，对比和谐',
-    'monochromatic': '同色相不同明度，简洁优雅',
-    'double-complementary': '两组互补色，丰富对比',
-    'compound': '类比+互补，复杂和谐',
-    'shades': '同色调不同饱和度，层次丰富',
-    'neutral': '加入灰色调，柔和淡雅',
-    'five-tone': '色环五等分，多彩均衡',
-    'six-tone': '色环六等分，绚丽多彩',
-  };
-  
-  return descriptions[scheme];
 };
 
 export default PaletteSchemeItem;

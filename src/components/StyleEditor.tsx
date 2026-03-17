@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RGB } from '../types/color';
 import { rgbToHex, hexToRgb } from '../utils/colorConversion';
 
@@ -28,6 +29,8 @@ interface StyleEditorProps {
 }
 
 const StyleEditor: React.FC<StyleEditorProps> = ({ settings, onChange }) => {
+  const { t } = useTranslation();
+  
   const updateColor = (key: keyof StyleSettings, value: string) => {
     onChange({ ...settings, [key]: value });
   };
@@ -135,23 +138,23 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ settings, onChange }) => {
 
   return (
     <div className="bg-gray-800/80 rounded-xl p-4 space-y-4 overflow-auto min-h-[500px]">
-      <h3 className="text-base font-bold text-white">🎨 样式编辑器</h3>
+      <h3 className="text-base font-bold text-white">{t('styleEditor.title')}</h3>
 
       <div className="space-y-2">
-        <div className="text-xs font-medium text-gray-300 border-b border-gray-700 pb-1">基础颜色</div>
-        <ColorInput label="背景" value={settings.bg} onChange={(v) => updateColor('bg', v)} />
-        <ColorInput label="主文字" value={settings.text} onChange={(v) => updateColor('text', v)} />
-        <ColorInput label="次文字" value={settings.textSecondary} onChange={(v) => updateColor('textSecondary', v)} />
-        <ColorInput label="链接" value={settings.link} onChange={(v) => updateColor('link', v)} />
-        <ColorInput label="引用" value={settings.blockquote} onChange={(v) => updateColor('blockquote', v)} />
+        <div className="text-xs font-medium text-gray-300 border-b border-gray-700 pb-1">{t('styleEditor.basicColors')}</div>
+        <ColorInput label={t('styleEditor.bg')} value={settings.bg} onChange={(v) => updateColor('bg', v)} />
+        <ColorInput label={t('styleEditor.mainText')} value={settings.text} onChange={(v) => updateColor('text', v)} />
+        <ColorInput label={t('styleEditor.secondaryText')} value={settings.textSecondary} onChange={(v) => updateColor('textSecondary', v)} />
+        <ColorInput label={t('styleEditor.link')} value={settings.link} onChange={(v) => updateColor('link', v)} />
+        <ColorInput label={t('styleEditor.blockquote')} value={settings.blockquote} onChange={(v) => updateColor('blockquote', v)} />
       </div>
 
       <div className="space-y-3">
-        <div className="text-xs font-medium text-gray-300 border-b border-gray-700 pb-1">标题样式</div>
-        <TextStyleEditor label="H1 章节" styleKey="h1" />
-        <TextStyleEditor label="H2 节" styleKey="h2" />
-        <TextStyleEditor label="H3 小节" styleKey="h3" />
-        <TextStyleEditor label="首句强调" styleKey="firstSentence" />
+        <div className="text-xs font-medium text-gray-300 border-b border-gray-700 pb-1">{t('styleEditor.titleStyles')}</div>
+        <TextStyleEditor label={t('styleEditor.h1Chapter')} styleKey="h1" />
+        <TextStyleEditor label={t('styleEditor.h2Section')} styleKey="h2" />
+        <TextStyleEditor label={t('styleEditor.h3Subsection')} styleKey="h3" />
+        <TextStyleEditor label={t('styleEditor.firstSentence')} styleKey="firstSentence" />
       </div>
     </div>
   );
