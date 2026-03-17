@@ -1,4 +1,19 @@
+# Dependencies
 node_modules
+
+# Build outputs
 dist
+release
+
+# IDE
 *.local
 .DS_Store
+.vscode
+.idea
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+Thumbs.db
