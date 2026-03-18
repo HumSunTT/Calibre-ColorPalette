@@ -161,9 +161,11 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
               }`}
-              title={t(template.descriptionKey)}
             >
-              {t(template.nameKey)}
+              {template.id === 'novel' && t('templates.novel.name')}
+              {template.id === 'technical' && t('templates.technical.name')}
+              {template.id === 'magazine' && t('templates.magazine.name')}
+              {template.id === 'classic' && t('templates.classic.name')}
             </button>
           ))}
         </div>
