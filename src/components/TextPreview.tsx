@@ -62,25 +62,153 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
     t('sampleText.paragraph3'),
   ];
 
-  const getTextStyleCSS = (style: TextStyle): React.CSSProperties => ({
-    color: style.color,
-    fontWeight: style.bold ? 700 : 400,
-    fontStyle: style.italic ? 'italic' : 'normal',
-    textDecoration: style.underline ? 'underline' : 'none',
-    fontSize: `${style.fontSize}%`,
-  });
+  const getPreviewStyle = (templateId: string, settings: StyleSettings): React.CSSProperties => {
+    const baseStyle: React.CSSProperties = {
+      backgroundColor: settings.bg,
+      color: settings.text,
+    };
+
+    switch (templateId) {
+      case 'novel':
+        return {
+          ...baseStyle,
+          fontFamily: '"Noto Serif CJK SC", "Source Han Serif CN", Georgia, serif',
+          lineHeight: 1.9,
+          background: settings.bg,
+        };
+      case 'technical':
+        return {
+          ...baseStyle,
+          fontFamily: '"Noto Sans CJK SC", "Source Han Sans CN", -apple-system, sans-serif',
+          lineHeight: 1.7,
+        };
+      case 'magazine':
+        return {
+          ...baseStyle,
+          fontFamily: '"Noto Sans CJK SC", "Helvetica Neue", sans-serif',
+          lineHeight: 1.75,
+          background: `linear-gradient(135deg, ${settings.bg} 0%, ${settings.h1.color}08 50%, ${settings.h2.color}08 100%)`,
+        };
+      case 'classic':
+        return {
+          ...baseStyle,
+          fontFamily: '"Noto Serif CJK SC", "Source Han Serif CN", "Georgia", "Times New Roman", serif',
+          lineHeight: 1.85,
+          background: settings.bg,
+        };
+      default:
+        return baseStyle;
+    }
+  };
+
+  const getHeadingStyle = (templateId: string, level: 'h1' | 'h2' | 'h3', baseStyle: TextStyle): React.CSSProperties => {
+    const common: React.CSSProperties = {
+      color: baseStyle.color,
+      fontWeight: baseStyle.bold ? 700 : 400,
+      fontStyle: baseStyle.italic ? 'italic' : 'normal',
+      textDecoration: baseStyle.underline ? 'underline' : 'none',
+      fontSize: `${baseStyle.fontSize}%`,
+    };
+
+    if (templateId === 'novel') {
+      if (level === 'h1') {
+        return {
+          ...common,
+          textAlign: 'center',
+          letterSpacing: '0.15em',
+          borderTop: `1px solid ${baseStyle.color}40`,
+          borderBottom: `1px solid ${baseStyle.color}40`,
+          padding: '0.6em 0',
+        };
+      }
+      if (level === 'h2') {
+        return {
+          ...common,
+          borderLeft: `2px solid ${baseStyle.color}60`,
+          paddingLeft: '0.5em',
+        };
+      }
+    }
+
+    if (templateId === 'technical') {
+      if (level === 'h1') {
+        return {
+          ...common,
+          textAlign: 'left',
+          borderBottom: `3px solid ${baseStyle.color}`,
+          paddingBottom: '0.4em',
+        };
+      }
+      if (level === 'h2') {
+        return {
+          ...common,
+          borderBottom: `2px solid ${baseStyle.color}60`,
+          paddingBottom: '0.3em',
+        };
+      }
+      if (level === 'h3') {
+        return {
+          ...common,
+          borderLeft: `4px solid ${baseStyle.color}`,
+          paddingLeft: '0.8em',
+        };
+      }
+    }
+
+    if (templateId === 'magazine') {
+      if (level === 'h1') {
+        return {
+          ...common,
+          textAlign: 'center',
+          background: `linear-gradient(90deg, ${baseStyle.color}15, ${baseStyle.color}25, ${baseStyle.color}15)`,
+          borderRadius: '8px',
+          padding: '0.8em 1.5em',
+        };
+      }
+      if (level === 'h2') {
+        return {
+          ...common,
+          background: `linear-gradient(90deg, ${baseStyle.color}12 0%, transparent 100%)`,
+          borderLeft: `5px solid ${baseStyle.color}`,
+          borderRadius: '0 6px 6px 0',
+          padding: '0.6em 1em',
+        };
+      }
+    }
+
+    if (templateId === 'classic') {
+      if (level === 'h1') {
+        return {
+          ...common,
+          textAlign: 'center',
+          letterSpacing: '0.2em',
+        };
+      }
+      if (level === 'h2') {
+        return {
+          ...common,
+          border: `1px solid ${baseStyle.color}40`,
+          borderLeft: `4px solid ${baseStyle.color}`,
+          background: `linear-gradient(90deg, ${baseStyle.color}08, transparent)`,
+          padding: '0.5em 1em',
+        };
+      }
+    }
+
+    return common;
+  };
 
   const renderParagraph = (text: string, index: number) => {
     if (text === t('sampleText.chapter')) {
       return (
-        <h1 key={index} className="text-3xl mb-4 mt-6" style={getTextStyleCSS(styleSettings.h1)}>
+        <h1 key={index} className="text-3xl mb-4 mt-6" style={getHeadingStyle(selectedTemplate, 'h1', styleSettings.h1)}>
           {text}
         </h1>
       );
     }
     if (text === t('sampleText.section1') || text === t('sampleText.section2')) {
       return (
-        <h2 key={index} className="text-xl mb-3 mt-5" style={getTextStyleCSS(styleSettings.h2)}>
+        <h2 key={index} className="text-xl mb-3 mt-5" style={getHeadingStyle(selectedTemplate, 'h2', styleSettings.h2)}>
           {text}
         </h2>
       );
@@ -100,12 +228,18 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
         content = `<b style="color:${styleSettings.firstSentence.color};font-weight:${styleSettings.firstSentence.bold ? 700 : 400}">${firstSentence}</b>${rest}`;
       }
     }
+
+    const pStyle: React.CSSProperties = {
+      color: textColor,
+      textIndent: selectedTemplate === 'technical' ? 0 : '2em',
+      lineHeight: selectedTemplate === 'novel' ? 1.9 : selectedTemplate === 'classic' ? 1.85 : 1.75,
+    };
     
     return (
       <p 
         key={index} 
         className="mb-4 text-justify"
-        style={{ color: textColor, textIndent: '2em' }}
+        style={pStyle}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -174,9 +308,9 @@ const TextPreview: React.FC<TextPreviewProps> = ({ baseColor }) => {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <div
           className="rounded-xl p-8 shadow-xl transition-all duration-300 min-h-[500px]"
-          style={{ backgroundColor: styleSettings.bg }}
+          style={getPreviewStyle(selectedTemplate, styleSettings)}
         >
-          <div className="max-w-none font-serif text-lg leading-relaxed">
+          <div className="max-w-none text-lg leading-relaxed">
             {sampleParagraphs.map((p, i) => renderParagraph(p, i))}
           </div>
         </div>
